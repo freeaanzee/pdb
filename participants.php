@@ -365,9 +365,11 @@
 				
 				# Registreer de annulering in de database
 				$submit_time = $row['submit_time'];
-				$con = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-				mysqli_set_charset($con, 'latin1');
-				mysqli_query($con,"UPDATE {$table_prefix}cf7dbplugin_submits SET field_value='CANCELLED' WHERE form_name='{$opt->getSignupTitle()}' AND field_name='Verified' AND submit_time={$submit_time}");
+				$wpdb->update(
+					$table_prefix.'cf7dbplugin_submits',
+					array( 'field_value' => 'CANCELLED' ),
+					array( 'form_name' => $opt->getSignupTitle(), 'field_name' => 'Verified', 'submit_time' => $submit_time ),
+				);
 				
 				# Vul als alles goed verlopen is de bestemmeling in (zodat de mail verstuurd kan worden)
 				$posted_data['Address'] = $opt->getAddress();
