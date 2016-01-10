@@ -113,7 +113,7 @@
 		function formRetrieve() { return do_shortcode('[contact-form-7 id="'.$this->cf7_retrieve.'" title="'.$this->retrieve_form.'"]'); }
 		function formCancel() { return do_shortcode('[contact-form-7 id="'.$this->cf7_cancel.'" title="'.$this->cancel_form.'"]'); }
 		function formMail() { return do_shortcode('[contact-form-7 id="'.$this->cf7_mail.'" title="'.$this->mail_form.'"]'); }
-		function getSignupTitle() { return $this->signup_form; }
+		function getSignupTitle() { return sanitize_text_field($this->signup_form); }
 		function getConfirmTitle() { return $this->confirm_form; }
 		function getPayTitle() { return $this->pay_form; }
 		function getRetrieveTitle() { return $this->retrieve_form; }
