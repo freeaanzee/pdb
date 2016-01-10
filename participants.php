@@ -19,11 +19,6 @@
 	#				- bij MySQL-query's moeten veldwaarden door single quotes omringd worden (= text) behalve submit_time (= number)
 	#				- trailing spaces in CF7-velden worden verwijderd, gebruik '&nbsp;' voor de zekerheid
 	
-	###############################
-	#  HIERONDER NIETS WIJZIGEN   #
-	#  TENZIJ U ER IETS VAN KENT  #
-	###############################
-	
 	require_once ABSPATH.'wp-config.php';
 	require_once ABSPATH.'wp-content/plugins/contact-form-7-to-database-extension/CFDBFormIterator.php';
 	
