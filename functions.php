@@ -6,13 +6,8 @@
 
 	add_action( 'wp_enqueue_scripts', 'theme_enqueue_styles' );
 
-	# Frederik Neirynck 2015
-	# koekedozeklan.be
-	# lecouperet.net
-	# Versie 1.4.1
-	
-	# Deze module mag vrij gebruikt (en aangepast) worden maar geef mij een seintje of link naar onze site als je er tevreden over bent
-	# Lees de installatiegids op www.koekedozeklan.be/database en volg de wijzigingen via www.koekedozeklan.be/demo
+	# Frederik Neirynck 2015-2016
+	# Version 1.4.1
 	
 	##############################################################
 	#  VERANDER DE WAARDEN VAN DE VARIABELEN NAAR UW VOORKEUREN  #
