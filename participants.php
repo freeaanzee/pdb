@@ -193,11 +193,17 @@
 				} else {
 					# Authoriseer de bevestiging indien de regel nog niet eerder bevestigd werd
 					$submit_time = $row['submit_time'];
-					$con = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-					mysqli_set_charset($con, 'latin1');
-					mysqli_query($con,"UPDATE {$table_prefix}cf7dbplugin_submits SET field_value='Yes' WHERE form_name='{$opt->getSignupTitle()}' AND field_name='Verified' AND submit_time={$submit_time}");
+					$wpdb->update(
+						$table_prefix.'cf7dbplugin_submits',
+						array( 'field_value' => 'Yes' ),
+						array( 'form_name' => $opt->getSignupTitle(), 'field_name' => 'Verified', 'submit_time' => $submit_time ),
+					);
 					$cur_time = microtime(true);
-					mysqli_query($con,"UPDATE {$table_prefix}cf7dbplugin_submits SET submit_time={$cur_time} WHERE form_name='{$opt->getSignupTitle()}' AND submit_time={$submit_time}");
+					$wpdb->update(
+						$table_prefix.'cf7dbplugin_submits',
+						array( 'sumit_time' => $cur_time ),
+						array( 'form_name' => $opt->getSignupTitle(), 'submit_time' => $submit_time ),
+					);
 					$posted_data['Verified'] = "Yes";
 					
 					# Voeg een waarschuwing toe indien er moet worden betaald vooraleer de inschrijving definitief is
@@ -211,14 +217,17 @@
 					# Voeg een waarschuwing toe indien de ploeg op de reservelijst zal belanden
 					if ( do_shortcode('[cfdb-count form="'.$opt->getSignupTitle().'" filter="Verified=Yes"]') > $opt->maxParticipants() ) {
 						$posted_data['Reserve'] = $opt->forcePayment() ? "Opgelet: omdat de quiz momenteel volzet is, zult u op de reservelijst terechtkomen. Indien u effectief uit de boot blijkt te vallen betalen wij het inschrijvingsgeld uiteraard zo snel mogelijk terug.&nbsp;" : "Opgelet: omdat de quiz momenteel volzet is, bent u op de reservelijst beland. U kunt zelf uw status opvolgen in de deelnemerslijst: van zodra er een nummer voor de naam van uw ploeg staat, bent u erbij!&nbsp;";
-						mysqli_query($con,"UPDATE {$table_prefix}cf7dbplugin_submits SET field_value='Yes' WHERE form_name='{$opt->getSignupTitle()}' AND field_name='Reserve' AND submit_time={$cur_time}");
+						$wpdb->update(
+							$table_prefix.'cf7dbplugin_submits',
+							array( 'field_value' => 'Yes' ),
+							array( 'form_name' => $opt->getSignupTitle(), 'field_name' => 'Reserve', 'submit_time' => $cur_time ),
+						);
 					} else {
 						$posted_data['Reserve'] = "";
 					}
 					
 					# Vul als alles goed verlopen is de bestemmeling in (zodat de mail verstuurd kan worden)
 					$posted_data['Address'] = $opt->getAddress();
-					mysqli_close($con);
 				}
 			}
 		} else {
