@@ -391,10 +391,12 @@
 					
 					# Zet het 'Reserve'-veld op 'No'
 					$submit_time = $reserve['submit_time'];
-					mysqli_query($con,"UPDATE {$table_prefix}cf7dbplugin_submits SET field_value='No' WHERE form_name='{$opt->getSignupTitle()}' AND field_name='Reserve' AND submit_time={$submit_time}");
+					$wpdb->update(
+						$table_prefix.'cf7dbplugin_submits',
+						array( 'field_value' => 'No' ),
+						array( 'form_name' => $opt->getSignupTitle(), 'field_name' => 'Reserve', 'submit_time' => $submit_time ),
+					);
 				}
-				
-				mysqli_close($con);
 			}
 		} else {
 	    	# Werp een verzenderror op door de bestemmeling te verwijderen
