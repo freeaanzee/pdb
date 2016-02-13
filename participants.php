@@ -259,22 +259,36 @@
 			
 			# Registreer de betaling in de database
 			$submit_time = $row['submit_time'];
-			$con = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-			mysqli_set_charset($con, 'latin1');
-			mysqli_query($con,"UPDATE {$table_prefix}cf7dbplugin_submits SET field_value='Yes' WHERE form_name='{$opt->getSignupTitle()}' AND field_name='Paid' AND submit_time={$submit_time}");
+			$wpdb->update(
+				$table_prefix.'cf7dbplugin_submits',
+				array( 'field_value' => 'Yes' ),
+				array( 'form_name' => $opt->getSignupTitle(), 'field_name' => 'Paid', 'submit_time' => $submit_time ),
+			);
 			$cur_time = microtime(true);
-			mysqli_query($con,"UPDATE {$table_prefix}cf7dbplugin_submits SET submit_time={$cur_time} WHERE form_name='{$opt->getSignupTitle()}' AND submit_time={$submit_time}");
+			$wpdb->update(
+				$table_prefix.'cf7dbplugin_submits',
+				array( 'submit_time' => $cur_time ),
+				array( 'form_name' => $opt->getSignupTitle(), 'submit_time' => $submit_time ),
+			);
 					
 			if ( participants() > $opt->maxParticipants() ) {
 				# Voeg een waarschuwing toe indien de ploeg op de reservelijst beland is
 				$posted_data['Reserve'] = "Opgelet: omdat de quiz momenteel volzet is, staat u voorlopig op de reservelijst. U kunt zelf uw status opvolgen in de deelnemerslijst: van zodra er een nummer voor de naam van uw ploeg staat, bent u erbij!&nbsp;";
 				$posted_data['Reserve'] .= $opt->forcePayment() ? "Indien u uit de boot blijkt te vallen betalen wij het inschrijvingsgeld uiteraard meteen terug.&nbsp;" : "";
-				mysqli_query($con,"UPDATE {$table_prefix}cf7dbplugin_submits SET field_value='Yes' WHERE form_name='{$opt->getSignupTitle()}' AND field_name='Reserve' AND submit_time={$cur_time}");
+				$wpdb->update(
+					$table_prefix.'cf7dbplugin_submits',
+					array( 'field_value' => 'Yes' ),
+					array( 'form_name' => $opt->getSignupTitle(), 'field_name' => 'Reserve', 'submit_time' => $cur_time ),
+				);
 			} else {
 				# Zet 'Reserve' terug op 'No' indien de ploeg sinds haar inschrijving opgeschoven is naar de vaste deelnemers
 				if ( $row['Reserve'] == 'Yes' ) {
 					$posted_data['Reserve'] = "Bovendien staat u inmiddels niet langer bij de reserveploegen!&nbsp;";
-					mysqli_query($con,"UPDATE {$table_prefix}cf7dbplugin_submits SET field_value='No' WHERE form_name='{$opt->getSignupTitle()}' AND field_name='Reserve' AND submit_time={$cur_time}");
+					$wpdb->update(
+						$table_prefix.'cf7dbplugin_submits',
+						array( 'field_value' => 'No' ),
+						array( 'form_name' => $opt->getSignupTitle(), 'field_name' => 'Reserve', 'submit_time' => $cur_time ),
+					);
 				} else {
 					$posted_data['Reserve'] = "";
 				}
