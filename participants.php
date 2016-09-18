@@ -4,20 +4,20 @@
 	# Version 1.4.1
 	
 	# WHAT'S NEW:	- categoriebepaling aangepast aan het nieuwe VQR-systeem
-	#				- verbeteringen aan het 'first come, first served'-principe
-	#				- terugbetalingsboodschap weergeven indien er geannuleerd wordt bij quiz met verplichte (en reeds geregistreerde) betaling
-	#				- statistieken bevatten niet langer de reserveploegen
-	#				- automatische reload na registreren van betaling
-	#				- enkel de zinvolle mailopties worden nog getoond
-	#				- de 19 Brusselse gemeenten toegevoegd 
-	#				- code compacter geschreven
+	#		- verbeteringen aan het 'first come, first served'-principe
+	#		- terugbetalingsboodschap weergeven indien er geannuleerd wordt bij quiz met verplichte (en reeds geregistreerde) betaling
+	#		- statistieken bevatten niet langer de reserveploegen
+	#		- automatische reload na registreren van betaling
+	#		- enkel de zinvolle mailopties worden nog getoond
+	#		- de 19 Brusselse gemeenten toegevoegd 
+	#		- code compacter geschreven
 	
-	# TO DO:		- optionele gebruikerstrings toevoegen
-	#				- echte WP-plugin bouwen
+	# TO DO:	- optionele gebruikerstrings toevoegen
+	#		- echte WP-plugin bouwen
 	
 	# WATCH OUT:	- voer deze query uit om een tabel zelf te kunnen bewerken: ALTER TABLE data_cf7dbplugin_submits ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-	#				- bij MySQL-query's moeten veldwaarden door single quotes omringd worden (= text) behalve submit_time (= number)
-	#				- trailing spaces in CF7-velden worden verwijderd, gebruik '&nbsp;' voor de zekerheid
+	#		- bij MySQL-query's moeten veldwaarden door single quotes omringd worden (= text) behalve submit_time (= number)
+	#		- trailing spaces in CF7-velden worden verwijderd, gebruik '&nbsp;' voor de zekerheid
 	
 	require_once ABSPATH.'wp-config.php';
 	require_once ABSPATH.'wp-content/plugins/contact-form-7-to-database-extension/CFDBFormIterator.php';
@@ -906,7 +906,7 @@
 		$exp->export($opt->getSignupTitle(), array( 'filter' => $opt->notPaid(), 'orderby' => 'Team asc' ));
 		$str = "<select name='Team' id='Team' onchange='document.getElementById(\"Team\").value=this.value;'><option value='N/A'>(selecteer)</option>";
 		while ( $row = $exp->nextRow() ) {
-			$str .= "<option id='".$row['Team']."' value='".$row['Team']."'>".$row['Team']."</option>";
+			$str .= "<option value='".esc_attr($row['Team'])."'>".$row['Team']."</option>";
 		}
 		$str .= "</select>";
 		return $str;
