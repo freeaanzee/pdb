@@ -3,7 +3,7 @@
 	 * Plugin Name:				Participants Database
 	 * Plugin URI:				https://github.com/freeaanzee/pdb
 	 * Description:				Register, verify and contact participants for your WordPress hosted event.
-	 * Version:					2.0.0
+	 * Version:					2.0.1
 	 * Author:					Full Stack Ahead
 	 * Author URI:				https://wwww.fullstackahead.be
 	 * License:					GNU General Public License v2
@@ -40,16 +40,16 @@
 			add_option( 'pdb_cf7_pay_id', 182 );
 			add_option( 'pdb_cf7_mail_id', 341 );
 			
-			add_option( 'pdb_event_title', '4de KoeKedozeKwis' );
+			add_option( 'pdb_event_title', '1ste Deelnemersdatabase' );
 			// Dankzij de streepjes interpreteert strtotime() dit als een Europese datum!
-			add_option( 'pdb_event_date', '06-10-2018' );
+			add_option( 'pdb_event_date', '01-01-2019' );
 			add_option( 'pdb_event_organizer', 'KoeKedozeKlan' );
 			add_option( 'pdb_event_mail', get_option('admin_email') );
 			add_option( 'pdb_event_url', home_url('/') );
 			add_option( 'pdb_event_max_participants', 10 );
 			add_option( 'pdb_event_max_reserves', 2 );
-			add_option( 'pdb_event_signup_limit', '05-10-2018 12:00' );
-			add_option( 'pdb_event_cancel_limit', '05-10-2018 12:00' );
+			add_option( 'pdb_event_signup_limit', '31-12-2018 12:00' );
+			add_option( 'pdb_event_cancel_limit', '31-12-2018 12:00' );
 			add_option( 'pdb_event_region', 'WVL' );
 			add_option( 'pdb_event_fixed_category', false );
 			add_option( 'pdb_event_price', 20 );
@@ -612,7 +612,7 @@
 			$posted_data['Telephone'] = format_phone( $posted_data['Telephone'] );
 		}
 		if ( remarks_enabled() ) {
-			$posted_data['Remarks'] = ucfirst( strtolower( trim($posted_data['Remarks']) ) );
+			$posted_data['Remarks'] = trim($posted_data['Remarks']);
 		}
 
 		if ( payments_enabled() ) {
@@ -730,13 +730,11 @@
 
 		// Formatteer de invoervelden net zoals bij de inschrijving
 		$posted_data['Team'] = format_team( $posted_data['Team'] );
-		$posted_data['Responsible'] = format_responsible( $posted_data['Responsible'] );
 		$temp_mail = format_mail( $posted_data['Mail'] );
 
 		// Initialiseer variabelen dat er zeker geen match is indien niets gevonden wordt RESPONSIBLE EVENTUEEL WEGLATEN?
 		$submit_team = 0;
-		$submit_responsible = 1;
-		$submit_mail = 2;
+		$submit_mail = 1;
 		
 		$iterator = new CFDBFormIterator();
 		$filter = 'Team='.$posted_data['Team'].'&&'.get_uncancelled_participants_param();
@@ -746,13 +744,6 @@
 			$submit_time_team = $row['submit_time'];	
 		}
 		
-		$filter = 'Responsible='.$posted_data['Responsible'].'&&'.get_uncancelled_participants_param();
-		$iterator->export( get_signup_form_title(), array( 'filter' => $filter ) );
-		$row = $iterator->nextRow();
-		if ( $row !== false ) {
-			$submit_time_responsible = $row['submit_time'];	
-		}
-		
 		$filter = 'Mail='.$temp_mail.'&&'.get_uncancelled_participants_param();
 		$iterator->export( get_signup_form_title(), array( 'filter' => $filter ) );
 		$row = $iterator->nextRow();
@@ -760,7 +751,7 @@
 			$submit_time_mail = $row['submit_time'];	
 		}
 		
-		if ( $submit_time_team === $submit_time_mail and $submit_time_responsible === $submit_time_mail ) {
+		if ( $submit_time_team === $submit_time_mail ) {
 			// Laat de bestemmeling staan (zodat de mail verstuurd kan worden) als de tijden overeen komen
 			$posted_data['Mail'] = $temp_mail;
 			$posted_data['Token'] = $row['Token'];	
@@ -799,7 +790,7 @@
 			$iterator->export( get_signup_form_title(), array( 'filter' => $filter ) );
 			$row = $iterator->nextRow();
 			if ( $row !== false ) {
-				$posted_data['Reason'] = ucfirst( strtolower( trim($posted_data['Reason']) ) );
+				$posted_data['Reason'] = trim($posted_data['Reason']);
 				
 				// Indien de regel nog niet eerder geanuuleerd werd: authoriseer de annulering in de CF7DB-tabel
 				$data = array(
