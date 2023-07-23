@@ -3,7 +3,7 @@
 	 * Plugin Name:				Participants Database
 	 * Plugin URI:				https://github.com/freeaanzee/pdb
 	 * Description:				Register, verify and contact participants for your WordPress hosted event.
-	 * Version:					2.0.2
+	 * Version:					2.0.3
 	 * Author:					Full Stack Ahead
 	 * Author URI:				https://wwww.fullstackahead.be
 	 * License:					GNU General Public License v2
@@ -37,18 +37,17 @@
 			add_option( 'pdb_cf7_mail_id', 341 );
 			
 			add_option( 'pdb_event_title', '5de KoeKedozeKwis' );
-			// Dankzij de streepjes interpreteert strtotime() dit als een Europese datum!
-			add_option( 'pdb_event_date', '25-11-2023' );
+			add_option( 'pdb_event_date', '2023-11-25 20:00' );
 			add_option( 'pdb_event_organizer', 'KoeKedozeKlan' );
 			add_option( 'pdb_event_mail', get_option('admin_email') );
 			add_option( 'pdb_event_url', home_url('/') );
 			add_option( 'pdb_event_max_participants', 30 );
 			add_option( 'pdb_event_max_reserves', 5 );
-			add_option( 'pdb_event_signup_limit', '24-11-2023 12:00' );
-			add_option( 'pdb_event_cancel_limit', '24-11-2023 12:00' );
+			add_option( 'pdb_event_signup_limit', '2023-11-24 12:00' );
+			add_option( 'pdb_event_cancel_limit', '2023-11-24 12:00' );
 			add_option( 'pdb_event_region', 'WVL' );
 			add_option( 'pdb_event_fixed_category', false );
-			add_option( 'pdb_event_price', 20 );
+			add_option( 'pdb_event_price', 25 );
 			add_option( 'pdb_event_iban', 'BE55 9730 9371 2744' );
 			
 			add_option( 'pdb_enable_location', true );
@@ -60,6 +59,7 @@
 
 			add_option( 'pdb_locations', array( 'Aalst', 'Aalter', 'Aarschot', 'Aartselaar', 'Affligem', 'Alken', 'Alveringem', 'Anderlecht', 'Antwerpen', 'Anzegem', 'Ardooie', 'Arendonk', 'As', 'Asse', 'Assenede', 'Avelgem', 'Baarle-Hertog', 'Balen', 'Beernem', 'Beerse', 'Beersel', 'Begijnendijk', 'Bekkevoort', 'Beringen', 'Berlaar', 'Berlare', 'Bertem', 'Bever', 'Beveren', 'Bierbeek', 'Bilzen', 'Blankenberge', 'Bocholt', 'Boechout', 'Bonheiden', 'Boom', 'Boortmeerbeek', 'Borgloon', 'Bornem', 'Borsbeek', 'Boutersem', 'Brakel', 'Brasschaat', 'Brecht', 'Bredene', 'Bree', 'Brugge', 'Brussel', 'Buggenhout', 'Damme', 'De Haan', 'De Panne', 'De Pinte', 'Deerlijk', 'Deinze', 'Denderleeuw', 'Dendermonde', 'Dentergem', 'Dessel', 'Destelbergen', 'Diepenbeek', 'Diest', 'Diksmuide', 'Dilbeek', 'Dilsen-Stokkem', 'Drogenbos', 'Duffel', 'Edegem', 'Eeklo', 'Elsene', 'Erpe-Mere', 'Essen', 'Etterbeek', 'Evere', 'Evergem', 'Galmaarden', 'Ganshoren', 'Gavere', 'Geel', 'Geetbets', 'Genk', 'Gent', 'Geraardsbergen', 'Gingelom', 'Gistel', 'Glabbeek', 'Gooik', 'Grimbergen', 'Grobbendonk', 'Haacht', 'Haaltert', 'Halen', 'Halle', 'Ham', 'Hamme', 'Hamont-Achel', 'Harelbeke', 'Hasselt', 'Hechtel-Eksel', 'Heers', 'Heist-op-den-Berg', 'Hemiksem', 'Herent', 'Herentals', 'Herenthout', 'Herk-de-Stad', 'Herne', 'Herselt', 'Herstappe', 'Herzele', 'Heusden-Zolder', 'Heuvelland', 'Hoegaarden', 'Hoeilaart', 'Hoeselt', 'Holsbeek', 'Hooglede', 'Hoogstraten', 'Horebeke', 'Houthalen-Helchteren', 'Houthulst', 'Hove', 'Huldenberg', 'Hulshout', 'Ichtegem', 'Ieper', 'Ingelmunster', 'Izegem', 'Jabbeke', 'Jette', 'Kalmthout', 'Kampenhout', 'Kapellen', 'Kapelle-op-den-Bos', 'Kaprijke', 'Kasterlee', 'Keerbergen', 'Kinrooi', 'Kluisbergen', 'Knesselare', 'Knokke-Heist', 'Koekelare', 'Koekelberg', 'Koksijde', 'Kontich', 'Kortemark', 'Kortenaken', 'Kortenberg', 'Kortessem', 'Kortrijk', 'Kraainem', 'Kruibeke', 'Kruishoutem', 'Kuurne', 'Laakdal', 'Laarne', 'Lanaken', 'Landen', 'Langemark-Poelkapelle', 'Lebbeke', 'Lede', 'Ledegem', 'Lendelede', 'Lennik', 'Leopoldsburg', 'Leuven', 'Lichtervelde', 'Liedekerke', 'Lier', 'Lierde', 'Lille', 'Linkebeek', 'Lint', 'Linter', 'Lochristi', 'Lokeren', 'Lommel', 'Londerzeel', 'Lo-Reninge', 'Lovendegem', 'Lubbeek', 'Lummen', 'Maarkedal', 'Maaseik', 'Maasmechelen', 'Machelen', 'Maldegem', 'Malle', 'Mechelen', 'Meerhout', 'Meeuwen-Gruitrode', 'Meise', 'Melle', 'Menen', 'Merchtem', 'Merelbeke', 'Merksplas', 'Mesen', 'Meulebeke', 'Middelkerke', 'Moerbeke', 'Mol', 'Moorslede', 'Mortsel', 'Nazareth', 'Neerpelt', 'Nevele', 'Niel', 'Nieuwerkerken', 'Nieuwpoort', 'Nijlen', 'Ninove', 'Olen', 'Oostende', 'Oosterzele', 'Oostkamp', 'Oostrozebeke', 'Opglabbeek', 'Opwijk', 'Oudenaarde', 'Oudenburg', 'Oudergem', 'Oud-Heverlee', 'Oud-Turnhout', 'Overijse', 'Overpelt', 'Peer', 'Pepingen', 'Pittem', 'Poperinge', 'Putte', 'Puurs', 'Ranst', 'Ravels', 'Retie', 'Riemst', 'Rijkevorsel', 'Roeselare', 'Ronse', 'Roosdaal', 'Rotselaar', 'Ruiselede', 'Rumst', 'Schaarbeek', 'Schelle', 'Scherpenheuvel-Zichem', 'Schilde', 'Schoten', 'Sint-Agatha-Berchem', 'Sint-Amands', 'Sint-Genesius-Rode', 'Sint-Gillis', 'Sint-Gillis-Waas', 'Sint-Jans-Molenbeek', 'Sint-Joost-ten-Node', 'Sint-Katelijne-Waver', 'Sint-Lambrechts-Woluwe', 'Sint-Laureins', 'Sint-Lievens-Houtem', 'Sint-Martens-Latem', 'Sint-Niklaas', 'Sint-Pieters-Leeuw', 'Sint-Pieters-Woluwe', 'Sint-Truiden', 'Spiere-Helkijn', 'Stabroek', 'Staden', 'Steenokkerzeel', 'Stekene', 'Temse', 'Ternat', 'Tervuren', 'Tessenderlo', 'Tielt', 'Tielt-Winge', 'Tienen', 'Tongeren', 'Torhout', 'Tremelo', 'Turnhout', 'Ukkel', 'Veurne', 'Vilvoorde', 'Vleteren', 'Voeren', 'Vorselaar', 'Vorst', 'Vosselaar', 'Waarschoot', 'Waasmunster', 'Wachtebeke', 'Waregem', 'Watermaal-Bosvoorde', 'Wellen', 'Wemmel', 'Wervik', 'Westerlo', 'Wetteren', 'Wevelgem', 'Wezembeek-Oppem', 'Wichelen', 'Wielsbeke', 'Wijnegem', 'Willebroek', 'Wingene', 'Wommelgem', 'Wortegem-Petegem', 'Wuustwezel', 'Zandhoven', 'Zaventem', 'Zedelgem', 'Zele', 'Zelzate', 'Zemst', 'Zingem', 'Zoersel', 'Zomergem', 'Zonhoven', 'Zonnebeke', 'Zottegem', 'Zoutleeuw', 'Zuienkerke', 'Zulte', 'Zutendaal', 'Zwalm', 'Zwevegem', 'Zwijndrecht' ) );
 			add_option( 'pdb_drinks', array( 'warme dranken', 'zware bieren', 'frisdrank', 'pintjes', 'wijn' ) );
+			add_option( 'pdb_quizmasters', array( 'Herman Van Molle', 'Erik Van Looy', 'Fien Germijns', 'Jeroen Meus', 'Adriaan Clynckemaillie' ) );
 			add_option( 'pdb_reasons', array( 'uit sympathie voor het goede doel', 'om gezellig iets te drinken', 'ter meerdere eer en glorie', 'voor de prijzentafel' ) );
 		}
 	}
@@ -79,19 +79,19 @@
 	add_shortcode( 'ophalingsformulier', 'print_retrieve_form' );
 	add_shortcode( 'mailformulier', 'print_mail_form' );
 	
-	add_shortcode( 'deelnemers', 'printParticipants' );
-	add_shortcode( 'statistieken', 'printStatistics' );
+	add_shortcode( 'deelnemers', 'pdb_print_participants' );
+	add_shortcode( 'statistieken', 'pdb_print_statistics' );
 	
-	add_shortcode( 'ploeg', 'pdb_get_team' );
-	add_shortcode( 'verantwoordelijke', 'pdb_get_responsible' );
-	add_shortcode( 'mail', 'pdb_get_mail' );
+	add_shortcode( 'get_team_by_token', 'pdb_get_team' );
+	add_shortcode( 'get_responsible_by_token', 'pdb_get_responsible' );
+	add_shortcode( 'get_mail_by_token', 'pdb_get_mail' );
 	
-	add_shortcode( 'city', 'pdb_text_city' );
 	add_shortcode( 'locations', 'pdb_select_locations' );
 	add_shortcode( 'telephone', 'pdb_text_telephone' );
 	add_shortcode( 'reasons', 'pdb_select_reasons' );
 	add_shortcode( 'drinks', 'pdb_select_drinks' );
-	add_shortcode( 'remarks', 'pdb_text_remarks' );
+	add_shortcode( 'remarks', 'pdb_textarea_remarks' );
+	
 	add_shortcode( 'teams', 'pdb_select_teams' );
 	add_shortcode( 'groups', 'pdb_select_groups' );
 	
@@ -135,13 +135,19 @@
 	}
 
 	// Voeg custom CF7-tags toe (bij voorkeur uit te breiden naar alle velden die herbruikt worden!)
-	add_action( 'wpcf7_init', 'wpcf7_add_form_tag_dynamicselect' );
+	add_action( 'wpcf7_init', 'pdf_add_dynamicselect_form_tag' );
  
-	function wpcf7_add_form_tag_dynamicselect() {
-		wpcf7_add_form_tag(	array( 'dynamicselect', 'dynamicselect*' ), 'dynamicselect_tag_handler', array( 'name-attr' => true ) );
+	function pdf_add_dynamicselect_form_tag() {
+		wpcf7_add_form_tag(
+			array( 'dynamicselect', 'dynamicselect*' ),
+			'pdb_dynamicselect_tag_handler',
+			array( 'name-attr' => true ),
+		);
 	}
 
-	function dynamicselect_tag_handler( $tag ) {
+	function pdb_dynamicselect_tag_handler( $tag ) {
+		error_log("HALLO");
+		
 		$tag = new WPCF7_FormTag( $tag );
 		
 		if ( empty( $tag->name ) ) {
@@ -174,7 +180,7 @@
 				$value = 'Niemandsland';
 			}
 
-			$options = get_locations();
+			$options = pdb_get_locations();
 		} elseif ( $tag->name === 'Drinks' ) {
 			if ( ! drinks_enabled() ) {
 				return NULL;
@@ -184,7 +190,7 @@
 				$value = 'niets doen';
 			}
 
-			$options = get_drinks();
+			$options = pdb_get_drinks();
 		} elseif ( $tag->name === 'Reason' ) {
 			if ( ! reasons_enabled() ) {
 				return NULL;
@@ -194,7 +200,7 @@
 				$value = 'trekken we eens aan onze aap';
 			}
 
-			$options = get_reasons();
+			$options = pdb_get_reasons();
 		}
 
 		// Probleem: 'disabled'-attribuut zorgt ervoor dat de waarde totaal niet doorgestuurd wordt
@@ -256,7 +262,7 @@
 	// Check of de ploegnaam, de verantwoordelijke en het e-mailadres overeenkomen met een niet-geannuleerde inschrijving
 	function pdb_validate_matches( $result, $tag ) {
 		$key = $tag['name'];
-		$value = $_POST[$key];
+		$value = $_POST[ $key ];
 
 		if ( $key === 'Mail' and ! pdb_check_duplicate( format_mail($value).'&&'.get_uncancelled_participants_param(), $key ) ) {
 			$result->invalidate( $key, 'Onbekend e-mailadres!' );
@@ -287,32 +293,34 @@
 	}
 	
 	// Algemene filter voor bewerken van verzonden formulierdata
-	add_filter ( 'wpcf7_posted_data', 'pdb_format_cf7_fields' );
+	add_filter( 'wpcf7_posted_data', 'pdb_format_cf7_fields' );
 	
 	function pdb_format_cf7_fields( $posted_data ) {
-		write_log( print_r( $posted_data, true ) );
+		error_log( print_r( $posted_data, true ) );
+		// Zie https://wordpress.org/support/topic/why-_wpcf7_container_post-is-empty-in-wpcf7_posted_data/
+		error_log( print_r( _POST, true ) );
 		
-		switch ( $posted_data['_wpcf7'] ) {
+		switch ( $_POST['_wpcf7'] ) {
 			case get_option('pdb_cf7_signup_id'):
-				return format_inscription($posted_data);
+				return format_inscription( $posted_data );
 			
 			case get_option('pdb_cf7_confirm_id'):
-				return format_confirmation($posted_data);
+				return format_confirmation( $posted_data );
 			
 			case get_option('pdb_cf7_retrieve_id'):
-				return format_retrieve($posted_data);
+				return format_retrieve( $posted_data );
 			
 			case get_option('pdb_cf7_cancel_id'):
-				return format_cancellation($posted_data);
+				return format_cancellation( $posted_data );
 			
 			case get_option('pdb_cf7_pay_id'):
-				return format_payment($posted_data);
+				return format_payment( $posted_data );
 			
 			case get_option('pdb_cf7_mail_id'):
-				return do_mailing($posted_data);
+				return do_mailing( $posted_data );
 			
 			case get_option('pdb_cf7_contact_id'):
-				return format_feedback($posted_data);
+				return format_feedback( $posted_data );
 			
 			default:
 				return $posted_data;
@@ -354,7 +362,7 @@
 	}
 	
 	function get_event_date( $format = 'd-m-Y' ) {
-		return date_i18n( $format, strtotime( get_option('pdb_event_date') ) );
+		return wp_date( $format, strtotime( get_option('pdb_event_date') ) );
 	}
 	
 	function get_event_organizer() {
@@ -432,15 +440,15 @@
 		return get_option('pdb_enable_payments');
 	}
 	
-	function get_locations() {
+	function pdb_get_locations() {
 		return get_option('pdb_locations');
 	}
 
-	function get_drinks() {
+	function pdb_get_drinks() {
 		return get_option('pdb_drinks');
 	}
 	
-	function get_reasons() {
+	function pdb_get_reasons() {
 		return get_option('pdb_reasons');
 	}
 	
@@ -565,14 +573,17 @@
 
 	// Haal data op uit het inschrijvingsformulier via de URL-token
 	function get_form_row_data( $column = 'Token' ) {
-		// Retourneert $default (= lege string) indien GET-parameter niet aanwezig 
-		if ( mb_strlen( get_query_var('Token') ) === 32 ) {
+		// Retourneert $default (= lege string) indien GET-parameter niet aanwezig
+		$token = get_query_var('Token');
+		error_log( $token );
+		
+		if ( strlen( $token ) === 32 ) {
 			$iterator = new CFDBFormIterator();
-			$iterator->export( get_signup_form_title(), array( 'filter' => 'Token='.get_query_var('Token') ) );
+			$iterator->export( get_signup_form_title(), array( 'filter' => 'Token='.$token ) );
 			$row = $iterator->nextRow();
 			if ( $row !== false ) {
 				if ( array_key_exists( $column, $row ) ) {
-					return $row[$column];
+					return $row[ $column ];
 				} else {
 					return "Onbestaande kolom!";
 				}
@@ -597,22 +608,24 @@
 		if ( telephone_enabled() ) {
 			$posted_data['Telephone'] = format_phone( $posted_data['Telephone'] );
 		}
+		
 		if ( remarks_enabled() ) {
 			$posted_data['Remarks'] = trim($posted_data['Remarks']);
 		}
-
+		
 		if ( payments_enabled() ) {
 			$posted_data['Paid'] = 'No';
 		} else {
 			$posted_data['Paid'] = 'N/A';
 		}
-
+		
 		// Creëer een code waarmee we de registratie later opnieuw kunnen opvragen
 		$posted_data['Token'] = bin2hex( openssl_random_pseudo_bytes(16) );
 		$posted_data['URL'] = get_event_url().'bevestigen/?Token='.$posted_data['Token'];
 		$posted_data['Reserve'] = 'No';
 		$posted_data['Verified'] = 'No';
 		
+		error_log( print_r( $posted_data, true ) );
 		return $posted_data;
 	}
 	
@@ -623,8 +636,8 @@
 		$posted_data['Title'] = get_event_title();
 		$posted_data['URL'] = get_event_url().'annuleren/?Token='.$posted_data['Token'];
 		$posted_data['Date'] = get_event_date('d/m/Y');
-
-		if ( mb_strlen($posted_data['Token']) === 32 ) {
+		
+		if ( strlen( $posted_data['Token'] ) === 32 ) {
 			global $wpdb;
 			$iterator = new CFDBFormIterator();
 			$filter = 'Token='.$posted_data['Token'].'&&'.get_uncancelled_participants_param();
@@ -639,19 +652,30 @@
 					$posted_data['Helper'] = '';
 				}
 				
-				// Of gewoon arrays kopïeren?
+				// Of gewoon arrays kopiëren?
 				if ( reasons_enabled() ) {
 					$posted_data['Reason'] = str_replace( array( ' we ', ' onze ' ), array( ' ze ', ' hun ' ), $row['Reason'] );
 				} else {
 					$posted_data['Reason'] = '';
 				}
+				
 				if ( drinks_enabled() ) {
 					$posted_data['Drinks'] = str_replace( array( ' we ', ' onze ' ), array( ' ze ', ' hun ' ), $row['Drinks'] );
 				} else {
 					$posted_data['Drinks'] = '';
 				}
-				if ( telephone_enabled() ) $posted_data['Telephone'] = $row['Telephone']; else $posted_data['Telephone'] = '';
-				if ( remarks_enabled() ) $posted_data['Remarks'] = $row['Remarks']; else $posted_data['Remarks'] = '';
+				
+				if ( telephone_enabled() ) {
+					$posted_data['Telephone'] = $row['Telephone'];
+				} else {
+					$posted_data['Telephone'] = '';
+				}
+				
+				if ( remarks_enabled() ) {
+					$posted_data['Remarks'] = $row['Remarks'];
+				} else {
+					$posted_data['Remarks'] = '';
+				}
 				
 				if ( $row['Verified'] === 'Yes' ) {
 					// Werp een verzenderror op door de bestemmeling te verwijderen WERKT NIET MEER?
@@ -685,7 +709,7 @@
 						} else {
 							$posted_data['Reserve'] = 'Opgelet: omdat de quiz momenteel volzet is, bent u op de reservelijst beland. Van zodra er voldoende ploegen uitgeschreven hebben, ontvangt u een e-mail en verschijnt er in de deelnemerslijst een tafelnummer voor de naam van uw ploeg.&nbsp;';
 						}
-
+						
 						// Registreer de reservenstatus in de CF7DB-tabel
 						$where['field_name'] = 'Reserve';
 						$wpdb->update( $wpdb->prefix.'cf7dbplugin_submits', $data, $where );
@@ -953,7 +977,7 @@
 		$posted_data['Name'] = format_responsible( $posted_data['Name'] );
 		$posted_data['Mail'] = format_mail( $posted_data['Mail'] );
 
-		//  Let op de [0]-index in $posted_data['Duplicate'] (= een checkbox!), zoniet nemen we niet enkel het tekstveld maar de hele subarray!
+		// Let op de [0]-index in $posted_data['Duplicate'] (= een checkbox!), zoniet nemen we niet enkel het tekstveld maar de hele subarray!
 		if ( mb_strlen( $posted_data['Duplicate'][0] ) > 10 ) {
 			$posted_data['Receiver'] = $posted_data['Name'].' <'.$posted_data['Mail'].'>';
 			$posted_data['Duplicate'][0] = 'Yes';
@@ -972,7 +996,7 @@
 	######################
 
 	// Druk de deelnemerslijst af
-	function print_participants() {
+	function pdb_print_participants() {
 		$str = print_participants_info();
 		
 		// Toon welk ploegen al in de zaal zijn (vergt auto refresh op pagina)
@@ -1006,22 +1030,57 @@
 		return $str;
 	}
 
-	// Voorzie een tekstveld voor de locatie
-	function pdb_text_city() {
-		if ( location_enabled() ) {
-			return "<p><b>Gemeente</b><br/><input type='text' name='Location' maxlength='32' required></p>";
-		} else {
-			return NULL;
+	function pdb_select_locations() {
+		if ( ! location_enabled() ) {
+			return;
 		}
+		
+		return pdb_get_dropdown_field( 'Location', 'Gemeente', pdb_get_locations() );
 	}
 	
-	// Voorzie een tekstveld voor het telefoonnummer
 	function pdb_text_telephone() {
-		if ( telephone_enabled() ) {
-			return "<p><b>Telefoon</b><br/><input type='text' name='Telephone' maxlength='10' required></p>";
-		} else {
-			return NULL;
+		if ( ! telephone_enabled() ) {
+			return;
 		}
+		
+		return '<p><b>Telefoon</b><br/><span class="wpcf7-form-control-wrap" data-name="Telephone"><input type="text" name="Telephone" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" maxlength="10" aria-required="true" aria-invalid="false" required></p>';
+	}
+	
+	function pdb_select_reasons() {
+		if ( ! reasons_enabled() ) {
+			return;
+		}
+		
+		// Shortcode in shortcode werkt niet ...
+		// return '[dynamicselect Reasons]';
+		return pdb_get_dropdown_field( 'Reasons', 'Redenen', pdb_get_reasons() );
+	}
+	
+	function pdb_select_drinks() {
+		if ( ! drinks_enabled() ) {
+			return;
+		}
+		
+		// Shortcode in shortcode werkt niet ...
+		// return '[dynamicselect Drinks]';
+		return pdb_get_dropdown_field( 'Drinks', 'Dranken', pdb_get_drinks() );
+	}
+	
+	function pdb_textarea_remarks() {
+		if ( ! remarks_enabled() ) {
+			return;
+		}
+		
+		return '<p><b>Vragen, opmerkingen, ...</b><br/><span class="wpcf7-form-control-wrap" data-name="Remarks"><textarea name="Remarks" class="wpcf7-form-control wpcf7-textarea" cols="40" rows="10" aria-invalid="false" ></textarea></span></p>';
+	}
+	
+	function pdb_get_dropdown_field( $name, $label, $options, $default_option = '(selecteer)' ) {
+		$output = '<option value="">'.$default_option.'</option>';
+		foreach ( $options as $option ) {
+			$output .= '<option value="'.$option.'">'.$option.'</option>'; 
+		}
+		
+		return '<p><b>'.$label.'</b><br/><span class="wpcf7-form-control-wrap" data-name="'.$name.'"><select name="'.$name.'" class="wpcf7-form-control wpcf7-select" aria-invalid="false">'.$output.'</select></span></p>';
 	}
 	
 
@@ -1120,7 +1179,7 @@
 	// Toon het annuleringsformulier
 	function print_cancel_form() {
 		if ( time() < get_cancel_limit_timestamp() ) {
-			if ( mb_strlen( get_query_var('Token') ) === 32 ) {
+			if ( strlen( get_query_var('Token') ) === 32 ) {
 				$str = "Hieronder vindt u een overzicht van uw inschrijvingsgegevens. Klik op de knop om uw knusse zitje op de ".get_event_title()." te annuleren. Opgepast: u zal onmiddellijk van de deelnemerslijst geschrapt worden! Opnieuw inschrijven met deze ploegnaam wordt onmogelijk.<br/><br/>".get_cancel_form();
 			} else {
 				$str = "Omdat u op onrechtmatige wijze op deze pagina belandde, krijgt u hieronder een foutmelding te zien. Snor de annulatielink in uw bevestigingsmail op, of ga naar <a href='../ophalen/'>de ophaalpagina</a> om een nieuwe link aan te vragen. U hoort het: de KoeKedozeKlan doet er alles aan om de diefstal van uw begeerde identiteit te voorkomen!<br/><br/>".get_cancel_form();
@@ -1138,7 +1197,7 @@
 	}
 	
 	// Druk de statistieken af van de bevestigde (en betaalde) niet-reserveploegen
-	function print_statistics() {
+	function pdb_print_statistics() {
 		if ( participants() > get_max_participants() ) {
 			$max = get_max_participants();
 		} else {
@@ -1166,7 +1225,7 @@
 				
 				$tot_cnt = 0;
 				$stats_reasons = array();
-				foreach ( get_reasons() as $reason ) {
+				foreach ( pdb_get_reasons() as $reason ) {
 					$cnt = intval( do_shortcode('[cfdb-count form="'.get_signup_form_title().'" filter="'.get_guaranteed_participants_param().'&&Reason='.$reason.'" limit="'.$max.'"]') );
 					$pct = $cnt / $max * 100;
 					$stats_reasons[] = ucfirst($reason).': '.number_format_i18n( $pct, 0 ).' %';
@@ -1176,7 +1235,7 @@
 				// Het verschil tussen het totaal aantal deelnemers (zonder reserves) en de som van alle antwoorden zijn de niet-antwoorden			
 				$non_pct = ( $max - $tot_cnt ) / $max * 100;
 				$stats_reasons[] = 'Geen antwoord: '.number_format_i18n( $non_pct, 0 ).' %';
-
+				
 				$str .= '<ul><li>'.implode( '</li><li>', $stats_reasons ).'</li></ul>';
 			}
 			
@@ -1185,7 +1244,7 @@
 				
 				$tot_cnt = 0;
 				$stats_drinks = array();
-				foreach ( get_drinks() as $drink ) {
+				foreach ( pdb_get_drinks() as $drink ) {
 					$cnt = intval( do_shortcode('[cfdb-count form="'.get_signup_form_title().'" filter="'.get_guaranteed_participants_param().'&&Drinks='.$drink.'" limit="'.$max.'"]') );
 					$pct = $cnt / $max * 100;
 					$stats_drinks[] = ucfirst($drink).': '.number_format_i18n( $pct, 0 ).' %';
