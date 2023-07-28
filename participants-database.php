@@ -3,7 +3,7 @@
 	 * Plugin Name:				Participants Database
 	 * Plugin URI:				https://github.com/freeaanzee/pdb
 	 * Description:				Register, verify and contact participants for your WordPress hosted event.
-	 * Version:					2.0.3
+	 * Version:					2.0.4
 	 * Author:					Full Stack Ahead
 	 * Author URI:				https://wwww.fullstackahead.be
 	 * License:					GNU General Public License v2
@@ -15,54 +15,133 @@
 	
 	if ( ! defined('ABSPATH') ) exit;
 	
-	##############
-	# ACTIVATION #
-	##############
-	
-	register_activation_hook( __FILE__, 'pdb_activation' );
-	
-	function pdb_activation() {
-		if ( ! is_plugin_active('contact-form-7/wp-contact-form-7.php') or ! is_plugin_active('contact-form-7-to-database-extension/contact-form-7-db.php') ) {
+	// Volg de structuur van disable-comments.php om de plugin met klasses en includes te laten werken!
+	class Participants_Database {
+		private static $instance = null;
+		
+		public static function get_instance() {
+			if ( is_null( self::$instance ) ) {
+				self::$instance = new self;
+			}
+			return self::$instance;
+		}
+		
+		function __construct() {
+			add_action( 'plugins_loaded', array( $this, 'init_filters' ) );
+			add_action( 'wp_loaded', array( $this, 'init_wploaded_filters' ) );
+		}
+		
+		public function init_filters() {
+			add_shortcode( 'inschrijvingsformulier', 'print_signup_form' );
+			add_shortcode( 'uitschrijvingsformulier', 'print_cancel_form' );
+			add_shortcode( 'bevestigingsformulier', 'print_confirm_form' );
+			add_shortcode( 'betalingsformulier', 'print_pay_form' );
+			add_shortcode( 'ophalingsformulier', 'print_retrieve_form' );
+			add_shortcode( 'mailformulier', 'print_mail_form' );
 			
-			// Annuleer activatie indien CF7 of CFDB niet actief is
-			deactivate_plugins(__FILE__);
-			die( _e( 'This plugin requires <a href="https://wordpress.org/plugins/contact-form-7/" target="_blank">Contact Form 7</a> and <a href="https://cfdbplugin.com" target="_blank">Contact Form DB</a> to be activated!', 'pdb' ) );
+			add_shortcode( 'deelnemers', 'pdb_print_participants' );
+			add_shortcode( 'statistieken', 'pdb_print_statistics' );
 			
-		} else {
-			add_option( 'pdb_cf7_signup_id', 246 );
-			add_option( 'pdb_cf7_confirm_id', 146 );
-			add_option( 'pdb_cf7_retrieve_id', 247 );
-			add_option( 'pdb_cf7_cancel_id', 13 );
-			add_option( 'pdb_cf7_pay_id', 182 );
-			add_option( 'pdb_cf7_mail_id', 341 );
+			add_shortcode( 'get_team_by_token', 'pdb_get_team' );
+			add_shortcode( 'get_responsible_by_token', 'pdb_get_responsible' );
+			add_shortcode( 'get_mail_by_token', 'pdb_get_mail' );
 			
-			add_option( 'pdb_event_title', '5de KoeKedozeKwis' );
-			add_option( 'pdb_event_date', '2023-11-25 20:00' );
-			add_option( 'pdb_event_organizer', 'KoeKedozeKlan' );
-			add_option( 'pdb_event_mail', get_option('admin_email') );
-			add_option( 'pdb_event_url', home_url('/') );
-			add_option( 'pdb_event_max_participants', 30 );
-			add_option( 'pdb_event_max_reserves', 5 );
-			add_option( 'pdb_event_signup_limit', '2023-11-24 12:00' );
-			add_option( 'pdb_event_cancel_limit', '2023-11-24 12:00' );
-			add_option( 'pdb_event_region', 'WVL' );
-			add_option( 'pdb_event_fixed_category', false );
-			add_option( 'pdb_event_price', 25 );
-			add_option( 'pdb_event_iban', 'BE55 9730 9371 2744' );
+			add_shortcode( 'locations', 'pdb_select_locations' );
+			add_shortcode( 'telephone', 'pdb_text_telephone' );
+			add_shortcode( 'reasons', 'pdb_select_reasons' );
+			add_shortcode( 'drinks', 'pdb_select_drinks' );
+			add_shortcode( 'remarks', 'pdb_textarea_remarks' );
 			
-			add_option( 'pdb_enable_location', true );
-			add_option( 'pdb_enable_telephone', true );
-			add_option( 'pdb_enable_drinks', true );
-			add_option( 'pdb_enable_reasons', true );
-			add_option( 'pdb_enable_remarks', true );
-			add_option( 'pdb_enable_payments', false );
-
-			add_option( 'pdb_locations', array( 'Aalst', 'Aalter', 'Aarschot', 'Aartselaar', 'Affligem', 'Alken', 'Alveringem', 'Anderlecht', 'Antwerpen', 'Anzegem', 'Ardooie', 'Arendonk', 'As', 'Asse', 'Assenede', 'Avelgem', 'Baarle-Hertog', 'Balen', 'Beernem', 'Beerse', 'Beersel', 'Begijnendijk', 'Bekkevoort', 'Beringen', 'Berlaar', 'Berlare', 'Bertem', 'Bever', 'Beveren', 'Bierbeek', 'Bilzen', 'Blankenberge', 'Bocholt', 'Boechout', 'Bonheiden', 'Boom', 'Boortmeerbeek', 'Borgloon', 'Bornem', 'Borsbeek', 'Boutersem', 'Brakel', 'Brasschaat', 'Brecht', 'Bredene', 'Bree', 'Brugge', 'Brussel', 'Buggenhout', 'Damme', 'De Haan', 'De Panne', 'De Pinte', 'Deerlijk', 'Deinze', 'Denderleeuw', 'Dendermonde', 'Dentergem', 'Dessel', 'Destelbergen', 'Diepenbeek', 'Diest', 'Diksmuide', 'Dilbeek', 'Dilsen-Stokkem', 'Drogenbos', 'Duffel', 'Edegem', 'Eeklo', 'Elsene', 'Erpe-Mere', 'Essen', 'Etterbeek', 'Evere', 'Evergem', 'Galmaarden', 'Ganshoren', 'Gavere', 'Geel', 'Geetbets', 'Genk', 'Gent', 'Geraardsbergen', 'Gingelom', 'Gistel', 'Glabbeek', 'Gooik', 'Grimbergen', 'Grobbendonk', 'Haacht', 'Haaltert', 'Halen', 'Halle', 'Ham', 'Hamme', 'Hamont-Achel', 'Harelbeke', 'Hasselt', 'Hechtel-Eksel', 'Heers', 'Heist-op-den-Berg', 'Hemiksem', 'Herent', 'Herentals', 'Herenthout', 'Herk-de-Stad', 'Herne', 'Herselt', 'Herstappe', 'Herzele', 'Heusden-Zolder', 'Heuvelland', 'Hoegaarden', 'Hoeilaart', 'Hoeselt', 'Holsbeek', 'Hooglede', 'Hoogstraten', 'Horebeke', 'Houthalen-Helchteren', 'Houthulst', 'Hove', 'Huldenberg', 'Hulshout', 'Ichtegem', 'Ieper', 'Ingelmunster', 'Izegem', 'Jabbeke', 'Jette', 'Kalmthout', 'Kampenhout', 'Kapellen', 'Kapelle-op-den-Bos', 'Kaprijke', 'Kasterlee', 'Keerbergen', 'Kinrooi', 'Kluisbergen', 'Knesselare', 'Knokke-Heist', 'Koekelare', 'Koekelberg', 'Koksijde', 'Kontich', 'Kortemark', 'Kortenaken', 'Kortenberg', 'Kortessem', 'Kortrijk', 'Kraainem', 'Kruibeke', 'Kruishoutem', 'Kuurne', 'Laakdal', 'Laarne', 'Lanaken', 'Landen', 'Langemark-Poelkapelle', 'Lebbeke', 'Lede', 'Ledegem', 'Lendelede', 'Lennik', 'Leopoldsburg', 'Leuven', 'Lichtervelde', 'Liedekerke', 'Lier', 'Lierde', 'Lille', 'Linkebeek', 'Lint', 'Linter', 'Lochristi', 'Lokeren', 'Lommel', 'Londerzeel', 'Lo-Reninge', 'Lovendegem', 'Lubbeek', 'Lummen', 'Maarkedal', 'Maaseik', 'Maasmechelen', 'Machelen', 'Maldegem', 'Malle', 'Mechelen', 'Meerhout', 'Meeuwen-Gruitrode', 'Meise', 'Melle', 'Menen', 'Merchtem', 'Merelbeke', 'Merksplas', 'Mesen', 'Meulebeke', 'Middelkerke', 'Moerbeke', 'Mol', 'Moorslede', 'Mortsel', 'Nazareth', 'Neerpelt', 'Nevele', 'Niel', 'Nieuwerkerken', 'Nieuwpoort', 'Nijlen', 'Ninove', 'Olen', 'Oostende', 'Oosterzele', 'Oostkamp', 'Oostrozebeke', 'Opglabbeek', 'Opwijk', 'Oudenaarde', 'Oudenburg', 'Oudergem', 'Oud-Heverlee', 'Oud-Turnhout', 'Overijse', 'Overpelt', 'Peer', 'Pepingen', 'Pittem', 'Poperinge', 'Putte', 'Puurs', 'Ranst', 'Ravels', 'Retie', 'Riemst', 'Rijkevorsel', 'Roeselare', 'Ronse', 'Roosdaal', 'Rotselaar', 'Ruiselede', 'Rumst', 'Schaarbeek', 'Schelle', 'Scherpenheuvel-Zichem', 'Schilde', 'Schoten', 'Sint-Agatha-Berchem', 'Sint-Amands', 'Sint-Genesius-Rode', 'Sint-Gillis', 'Sint-Gillis-Waas', 'Sint-Jans-Molenbeek', 'Sint-Joost-ten-Node', 'Sint-Katelijne-Waver', 'Sint-Lambrechts-Woluwe', 'Sint-Laureins', 'Sint-Lievens-Houtem', 'Sint-Martens-Latem', 'Sint-Niklaas', 'Sint-Pieters-Leeuw', 'Sint-Pieters-Woluwe', 'Sint-Truiden', 'Spiere-Helkijn', 'Stabroek', 'Staden', 'Steenokkerzeel', 'Stekene', 'Temse', 'Ternat', 'Tervuren', 'Tessenderlo', 'Tielt', 'Tielt-Winge', 'Tienen', 'Tongeren', 'Torhout', 'Tremelo', 'Turnhout', 'Ukkel', 'Veurne', 'Vilvoorde', 'Vleteren', 'Voeren', 'Vorselaar', 'Vorst', 'Vosselaar', 'Waarschoot', 'Waasmunster', 'Wachtebeke', 'Waregem', 'Watermaal-Bosvoorde', 'Wellen', 'Wemmel', 'Wervik', 'Westerlo', 'Wetteren', 'Wevelgem', 'Wezembeek-Oppem', 'Wichelen', 'Wielsbeke', 'Wijnegem', 'Willebroek', 'Wingene', 'Wommelgem', 'Wortegem-Petegem', 'Wuustwezel', 'Zandhoven', 'Zaventem', 'Zedelgem', 'Zele', 'Zelzate', 'Zemst', 'Zingem', 'Zoersel', 'Zomergem', 'Zonhoven', 'Zonnebeke', 'Zottegem', 'Zoutleeuw', 'Zuienkerke', 'Zulte', 'Zutendaal', 'Zwalm', 'Zwevegem', 'Zwijndrecht' ) );
-			add_option( 'pdb_drinks', array( 'warme dranken', 'zware bieren', 'frisdrank', 'pintjes', 'wijn' ) );
-			add_option( 'pdb_quizmasters', array( 'Herman Van Molle', 'Erik Van Looy', 'Fien Germijns', 'Jeroen Meus', 'Adriaan Clynckemaillie' ) );
-			add_option( 'pdb_reasons', array( 'uit sympathie voor het goede doel', 'om gezellig iets te drinken', 'ter meerdere eer en glorie', 'voor de prijzentafel' ) );
+			add_shortcode( 'teams', 'pdb_select_teams' );
+			add_shortcode( 'groups', 'pdb_select_groups' );
+		}
+		
+		public function init_wploaded_filters() {
+			if ( is_admin() ) {
+				register_activation_hook( __FILE__, array( $this, 'activate_plugin' ) );
+				register_uninstall_hook( __FILE__, array( $this, 'uninstall_plugin' ) );
+			}
+		}
+		
+		public function activate_plugin() {
+			if ( ! is_plugin_active('contact-form-7/wp-contact-form-7.php') or ! is_plugin_active('contact-form-7-to-database-extension/contact-form-7-db.php') ) {
+				
+				// Annuleer activatie indien CF7 of CFDB niet actief is
+				deactivate_plugins( __FILE__ );
+				die( _e( 'This plugin requires <a href="https://wordpress.org/plugins/contact-form-7/" target="_blank">Contact Form 7</a> and <a href="https://cfdbplugin.com" target="_blank">Contact Form DB</a> to be activated!', 'pdb' ) );
+				
+			} else {
+				add_option( 'pdb_cf7_signup_id', 246 );
+				add_option( 'pdb_cf7_confirm_id', 146 );
+				add_option( 'pdb_cf7_retrieve_id', 247 );
+				add_option( 'pdb_cf7_cancel_id', 13 );
+				add_option( 'pdb_cf7_pay_id', 182 );
+				add_option( 'pdb_cf7_mail_id', 341 );
+				
+				add_option( 'pdb_event_title', '5de KoeKedozeKwis' );
+				add_option( 'pdb_event_date', '2023-11-25 20:00' );
+				add_option( 'pdb_event_organizer', 'KoeKedozeKlan' );
+				add_option( 'pdb_event_mail', get_option('admin_email') );
+				add_option( 'pdb_event_url', home_url('/') );
+				add_option( 'pdb_event_max_participants', 30 );
+				add_option( 'pdb_event_max_reserves', 5 );
+				add_option( 'pdb_event_signup_limit', '2023-11-24 12:00' );
+				add_option( 'pdb_event_cancel_limit', '2023-11-24 12:00' );
+				add_option( 'pdb_event_region', 'WVL' );
+				add_option( 'pdb_event_fixed_category', false );
+				add_option( 'pdb_event_price', 25 );
+				add_option( 'pdb_event_iban', 'BE55 9730 9371 2744' );
+				
+				add_option( 'pdb_enable_location', true );
+				add_option( 'pdb_enable_telephone', true );
+				add_option( 'pdb_enable_drinks', true );
+				add_option( 'pdb_enable_reasons', true );
+				add_option( 'pdb_enable_remarks', true );
+				add_option( 'pdb_enable_payments', false );
+		
+				add_option( 'pdb_locations', array( 'Aalst', 'Aalter', 'Aarschot', 'Aartselaar', 'Affligem', 'Alken', 'Alveringem', 'Anderlecht', 'Antwerpen', 'Anzegem', 'Ardooie', 'Arendonk', 'As', 'Asse', 'Assenede', 'Avelgem', 'Baarle-Hertog', 'Balen', 'Beernem', 'Beerse', 'Beersel', 'Begijnendijk', 'Bekkevoort', 'Beringen', 'Berlaar', 'Berlare', 'Bertem', 'Bever', 'Beveren', 'Bierbeek', 'Bilzen', 'Blankenberge', 'Bocholt', 'Boechout', 'Bonheiden', 'Boom', 'Boortmeerbeek', 'Borgloon', 'Bornem', 'Borsbeek', 'Boutersem', 'Brakel', 'Brasschaat', 'Brecht', 'Bredene', 'Bree', 'Brugge', 'Brussel', 'Buggenhout', 'Damme', 'De Haan', 'De Panne', 'De Pinte', 'Deerlijk', 'Deinze', 'Denderleeuw', 'Dendermonde', 'Dentergem', 'Dessel', 'Destelbergen', 'Diepenbeek', 'Diest', 'Diksmuide', 'Dilbeek', 'Dilsen-Stokkem', 'Drogenbos', 'Duffel', 'Edegem', 'Eeklo', 'Elsene', 'Erpe-Mere', 'Essen', 'Etterbeek', 'Evere', 'Evergem', 'Galmaarden', 'Ganshoren', 'Gavere', 'Geel', 'Geetbets', 'Genk', 'Gent', 'Geraardsbergen', 'Gingelom', 'Gistel', 'Glabbeek', 'Gooik', 'Grimbergen', 'Grobbendonk', 'Haacht', 'Haaltert', 'Halen', 'Halle', 'Ham', 'Hamme', 'Hamont-Achel', 'Harelbeke', 'Hasselt', 'Hechtel-Eksel', 'Heers', 'Heist-op-den-Berg', 'Hemiksem', 'Herent', 'Herentals', 'Herenthout', 'Herk-de-Stad', 'Herne', 'Herselt', 'Herstappe', 'Herzele', 'Heusden-Zolder', 'Heuvelland', 'Hoegaarden', 'Hoeilaart', 'Hoeselt', 'Holsbeek', 'Hooglede', 'Hoogstraten', 'Horebeke', 'Houthalen-Helchteren', 'Houthulst', 'Hove', 'Huldenberg', 'Hulshout', 'Ichtegem', 'Ieper', 'Ingelmunster', 'Izegem', 'Jabbeke', 'Jette', 'Kalmthout', 'Kampenhout', 'Kapellen', 'Kapelle-op-den-Bos', 'Kaprijke', 'Kasterlee', 'Keerbergen', 'Kinrooi', 'Kluisbergen', 'Knesselare', 'Knokke-Heist', 'Koekelare', 'Koekelberg', 'Koksijde', 'Kontich', 'Kortemark', 'Kortenaken', 'Kortenberg', 'Kortessem', 'Kortrijk', 'Kraainem', 'Kruibeke', 'Kruishoutem', 'Kuurne', 'Laakdal', 'Laarne', 'Lanaken', 'Landen', 'Langemark-Poelkapelle', 'Lebbeke', 'Lede', 'Ledegem', 'Lendelede', 'Lennik', 'Leopoldsburg', 'Leuven', 'Lichtervelde', 'Liedekerke', 'Lier', 'Lierde', 'Lille', 'Linkebeek', 'Lint', 'Linter', 'Lochristi', 'Lokeren', 'Lommel', 'Londerzeel', 'Lo-Reninge', 'Lovendegem', 'Lubbeek', 'Lummen', 'Maarkedal', 'Maaseik', 'Maasmechelen', 'Machelen', 'Maldegem', 'Malle', 'Mechelen', 'Meerhout', 'Meeuwen-Gruitrode', 'Meise', 'Melle', 'Menen', 'Merchtem', 'Merelbeke', 'Merksplas', 'Mesen', 'Meulebeke', 'Middelkerke', 'Moerbeke', 'Mol', 'Moorslede', 'Mortsel', 'Nazareth', 'Neerpelt', 'Nevele', 'Niel', 'Nieuwerkerken', 'Nieuwpoort', 'Nijlen', 'Ninove', 'Olen', 'Oostende', 'Oosterzele', 'Oostkamp', 'Oostrozebeke', 'Opglabbeek', 'Opwijk', 'Oudenaarde', 'Oudenburg', 'Oudergem', 'Oud-Heverlee', 'Oud-Turnhout', 'Overijse', 'Overpelt', 'Peer', 'Pepingen', 'Pittem', 'Poperinge', 'Putte', 'Puurs', 'Ranst', 'Ravels', 'Retie', 'Riemst', 'Rijkevorsel', 'Roeselare', 'Ronse', 'Roosdaal', 'Rotselaar', 'Ruiselede', 'Rumst', 'Schaarbeek', 'Schelle', 'Scherpenheuvel-Zichem', 'Schilde', 'Schoten', 'Sint-Agatha-Berchem', 'Sint-Amands', 'Sint-Genesius-Rode', 'Sint-Gillis', 'Sint-Gillis-Waas', 'Sint-Jans-Molenbeek', 'Sint-Joost-ten-Node', 'Sint-Katelijne-Waver', 'Sint-Lambrechts-Woluwe', 'Sint-Laureins', 'Sint-Lievens-Houtem', 'Sint-Martens-Latem', 'Sint-Niklaas', 'Sint-Pieters-Leeuw', 'Sint-Pieters-Woluwe', 'Sint-Truiden', 'Spiere-Helkijn', 'Stabroek', 'Staden', 'Steenokkerzeel', 'Stekene', 'Temse', 'Ternat', 'Tervuren', 'Tessenderlo', 'Tielt', 'Tielt-Winge', 'Tienen', 'Tongeren', 'Torhout', 'Tremelo', 'Turnhout', 'Ukkel', 'Veurne', 'Vilvoorde', 'Vleteren', 'Voeren', 'Vorselaar', 'Vorst', 'Vosselaar', 'Waarschoot', 'Waasmunster', 'Wachtebeke', 'Waregem', 'Watermaal-Bosvoorde', 'Wellen', 'Wemmel', 'Wervik', 'Westerlo', 'Wetteren', 'Wevelgem', 'Wezembeek-Oppem', 'Wichelen', 'Wielsbeke', 'Wijnegem', 'Willebroek', 'Wingene', 'Wommelgem', 'Wortegem-Petegem', 'Wuustwezel', 'Zandhoven', 'Zaventem', 'Zedelgem', 'Zele', 'Zelzate', 'Zemst', 'Zingem', 'Zoersel', 'Zomergem', 'Zonhoven', 'Zonnebeke', 'Zottegem', 'Zoutleeuw', 'Zuienkerke', 'Zulte', 'Zutendaal', 'Zwalm', 'Zwevegem', 'Zwijndrecht' ) );
+				add_option( 'pdb_drinks', array( 'warme dranken', 'zware bieren', 'frisdrank', 'pintjes', 'wijn' ) );
+				add_option( 'pdb_quizmasters', array( 'Herman Van Molle', 'Erik Van Looy', 'Fien Germijns', 'Jeroen Meus', 'Adriaan Clynckemaillie' ) );
+				add_option( 'pdb_reasons', array( 'uit sympathie voor het goede doel', 'om gezellig iets te drinken', 'ter meerdere eer en glorie', 'voor de prijzentafel' ) );
+			}
+		}
+		
+		public function uninstall_plugin() {
+			delete_option('pdb_cf7_signup_id');
+			delete_option('pdb_cf7_confirm_id');
+			delete_option('pdb_cf7_retrieve_id');
+			delete_option('pdb_cf7_cancel_id');
+			delete_option('pdb_cf7_pay_id');
+			delete_option('pdb_cf7_mail_id');
+			
+			delete_option('pdb_event_title');
+			delete_option('pdb_event_date');
+			delete_option('pdb_event_organizer');
+			delete_option('pdb_event_mail');
+			delete_option('pdb_event_url');
+			delete_option('pdb_event_max_participants');
+			delete_option('pdb_event_max_reserves');
+			delete_option('pdb_event_signup_limit');
+			delete_option('pdb_event_cancel_limit');
+			delete_option('pdb_event_region');
+			delete_option('pdb_event_fixed_category');
+			delete_option('pdb_event_price');
+			delete_option('pdb_event_iban');
+			
+			delete_option('pdb_enable_location');
+			delete_option('pdb_enable_telephone');
+			delete_option('pdb_enable_drinks');
+			delete_option('pdb_enable_reasons');
+			delete_option('pdb_enable_remarks');
+			delete_option('pdb_enable_payments');
+			
+			delete_option('pdb_locations');
+			delete_option('pdb_drinks');
+			delete_option('pdb_reasons');	
 		}
 	}
+	
+	Participants_Database::get_instance();
 	
 	
 	
@@ -71,29 +150,6 @@
 	##################
 
 	require_once WP_PLUGIN_DIR.'/contact-form-7-to-database-extension/CFDBFormIterator.php';
-	
-	add_shortcode( 'inschrijvingsformulier', 'print_signup_form' );
-	add_shortcode( 'uitschrijvingsformulier', 'print_cancel_form' );
-	add_shortcode( 'bevestigingsformulier', 'print_confirm_form' );
-	add_shortcode( 'betalingsformulier', 'print_pay_form' );
-	add_shortcode( 'ophalingsformulier', 'print_retrieve_form' );
-	add_shortcode( 'mailformulier', 'print_mail_form' );
-	
-	add_shortcode( 'deelnemers', 'pdb_print_participants' );
-	add_shortcode( 'statistieken', 'pdb_print_statistics' );
-	
-	add_shortcode( 'get_team_by_token', 'pdb_get_team' );
-	add_shortcode( 'get_responsible_by_token', 'pdb_get_responsible' );
-	add_shortcode( 'get_mail_by_token', 'pdb_get_mail' );
-	
-	add_shortcode( 'locations', 'pdb_select_locations' );
-	add_shortcode( 'telephone', 'pdb_text_telephone' );
-	add_shortcode( 'reasons', 'pdb_select_reasons' );
-	add_shortcode( 'drinks', 'pdb_select_drinks' );
-	add_shortcode( 'remarks', 'pdb_textarea_remarks' );
-	
-	add_shortcode( 'teams', 'pdb_select_teams' );
-	add_shortcode( 'groups', 'pdb_select_groups' );
 	
 	// Verberg de CF7-configuratiefouten
 	add_filter( 'wpcf7_validate_configuration', '__return_false' );
@@ -259,7 +315,7 @@
 		return $result;
 	}
 
-	// Check of de ploegnaam, de verantwoordelijke en het e-mailadres overeenkomen met een niet-geannuleerde inschrijving
+	// Check of de ploegnaam en het e-mailadres overeenkomen met een niet-geannuleerde inschrijving
 	function pdb_validate_matches( $result, $tag ) {
 		$key = $tag['name'];
 		$value = $_POST[ $key ];
@@ -270,11 +326,8 @@
 		if ( $key === 'Team' and ! pdb_check_duplicate( format_team($value).'&&'.get_uncancelled_participants_param(), $key ) ) {
 			$result->invalidate( $key, 'Onbekende ploegnaam!' );
 		}
-		if ( $key === 'Responsible' and ! pdb_check_duplicate( format_responsible($value).'&&'.get_uncancelled_participants_param(), $key ) ) {
-			$result->invalidate( $key, 'Onbekende verantwoordelijke!' );
-		}
 		
-		// Check of 3 velden wel tot dezelfde inschrijving behoren gebeurt in format_retrieve()
+		// Check of de velden wel tot dezelfde inschrijving behoren gebeurt in format_retrieve()
 		return $result;
 	}
 	
@@ -1163,37 +1216,37 @@
 
 	// Toon het bevestigingsformulier
 	function print_confirm_form() {
-		return "Hieronder vindt u een overzicht van uw gegevens. Klik op de knop om uw inschrijving te bevestigen. (Indien u op onrechtmatige wijze op deze pagina belandde, krijgt u een foutmelding te zien.)<br/><br/>".get_confirm_form();
+		return '<p>Hieronder vindt u een overzicht van uw gegevens. Klik op de knop om uw inschrijving te bevestigen. (Indien u op onrechtmatige wijze op deze pagina belandde, krijgt u een foutmelding te zien.)</p>' . get_confirm_form();
 	}
 
 	// Toon het betalingsformulier
 	function print_pay_form() {
-		return "<table></table>".get_pay_form();
+		return '<table></table>' . get_pay_form();
 	}
 	
 	// Toon het ophalingsformulier
 	function print_retrieve_form() {
-		return "Bent u de bevestigingsmail met uw speciale uitschrijvingscode kwijt? Vul hieronder exact dezelfde gegevens in als bij uw inschrijving en onze eigen neurotische Peter Paulus Post bezorgt u een nieuwe link.<br/><br/>".get_retrieve_form();
+		return '<p>Bent u de bevestigingsmail met uw speciale uitschrijvingscode kwijt? Vul hieronder exact dezelfde gegevens in als bij uw inschrijving en onze eigen neurotische Peter Paulus Post bezorgt u een nieuwe link.</p>' . get_retrieve_form();
 	}
 	
 	// Toon het annuleringsformulier
 	function print_cancel_form() {
 		if ( time() < get_cancel_limit_timestamp() ) {
 			if ( strlen( get_query_var('Token') ) === 32 ) {
-				$str = "Hieronder vindt u een overzicht van uw inschrijvingsgegevens. Klik op de knop om uw knusse zitje op de ".get_event_title()." te annuleren. Opgepast: u zal onmiddellijk van de deelnemerslijst geschrapt worden! Opnieuw inschrijven met deze ploegnaam wordt onmogelijk.<br/><br/>".get_cancel_form();
+				$output = sprintf( 'Hieronder vindt u een overzicht van uw inschrijvingsgegevens. Klik op de knop om uw knusse zitje op de %s te annuleren. Opgepast: u zal onmiddellijk van de deelnemerslijst geschrapt worden! Opnieuw inschrijven met deze ploegnaam wordt onmogelijk.', get_event_title() );
 			} else {
-				$str = "Omdat u op onrechtmatige wijze op deze pagina belandde, krijgt u hieronder een foutmelding te zien. Snor de annulatielink in uw bevestigingsmail op, of ga naar <a href='../ophalen/'>de ophaalpagina</a> om een nieuwe link aan te vragen. U hoort het: de KoeKedozeKlan doet er alles aan om de diefstal van uw begeerde identiteit te voorkomen!<br/><br/>".get_cancel_form();
+				$output = sprintf( 'Omdat u op onrechtmatige wijze op deze pagina belandde, krijgt u hieronder een foutmelding te zien. Snor de annulatielink in uw bevestigingsmail op, of ga naar <a href="%s">de ophaalpagina</a> om een nieuwe link aan te vragen. U hoort het: de KoeKedozeKlan doet er alles aan om de diefstal van uw begeerde identiteit te voorkomen!', get_event_url().'ophalen/' );
 			}
-		} else {
-    		$str = "<p>Annuleren via de site is helaas niet meer mogelijk!</p><p>Contacteer Adriaan (0485 989 256) of Frederik (0472 788 515) persoonlijk.</p><br/>";
-    	}
-		
-		return $str;
+			
+			return '<p>' . $output . '</p>' . get_cancel_form();
+		}
+    	
+		return '<p>Annuleren via de site is helaas niet meer mogelijk!</p><p>Contacteer Adriaan (0485 989 256) of Frederik (0472 788 515) persoonlijk.</p>';
 	}
 	
 	// Toon het mailformulier
 	function print_mail_form() {
-		return "Enkel ploegen die hun e-mailadres verifieerden door op de link in de bevestigingsmail te klikken, worden opgenomen in de mailing. De mail kan gepersonaliseerd worden met de variabelen #Naam#, #Ploeg#, #Stad#, #URL# en #Code#. Ook gebruik van HTML-opmaak is mogelijk. U krijgt achteraf te zien hoeveel e-mails er verstuurd werden. Als afzender gebruikt het formulier de naam en het e-mailadres van de organisator (zoals opgegeven in functions.php).<br/><br/>".get_mail_form();
+		return '<p>Enkel ploegen die hun e-mailadres verifieerden door op de link in de bevestigingsmail te klikken, worden opgenomen in de mailing. De mail kan gepersonaliseerd worden met de variabelen #Naam#, #Ploeg#, #Stad#, #URL# en #Code#. Ook gebruik van HTML-opmaak is mogelijk. U krijgt achteraf te zien hoeveel e-mails er verstuurd werden. Als afzender gebruikt het formulier de naam en het e-mailadres van de organisator (zoals opgegeven in functions.php).</p>' . get_mail_form();
 	}
 	
 	// Druk de statistieken af van de bevestigde (en betaalde) niet-reserveploegen
@@ -1317,7 +1370,7 @@
 			50	=>	array(80,64,53,44,37,31,26,22,18,15,12,10,8,7,6,5,4,3,2,1),
 		);
 
-		// Provinciale correcties tijdens seizoen 2017-2018
+		// Provinciale correcties tijdens seizoen 2023-2024
 		$corr_pts = array(
 			'WVL'	=>	0,
 			'OVL'	=>	0,
@@ -1342,7 +1395,7 @@
 		// Tel de sterktepunten van de tien sterkste ploegen en stel de voorlopige categorie in
 		$maxpts = intval( do_shortcode('[cfdb-value form="'.get_signup_form_title().'" show="Strength" filter="'.get_guaranteed_participants_param().'" limit="0,'.$limit.'" orderby="Strength desc" function="sum"]') );
 		$cat = $maxpts;
-
+		
 		// Is het aantal sterktepunten afgetopt?
 		$is_topped = ( $pts > $maxpts ) ? true : false;
 		
@@ -1371,8 +1424,8 @@
 		$manna = implode( $delim, $fixed_pts[$cat] );
 		// Laatste komma vervangen door 'en'
 		$manna = substr_replace( $manna, ' en ', strrpos( $manna, $delim ), strlen($delim) );
-
-		# Print de categoriebepaling
+		
+		// Print de categoriebepaling
 		$str = "";
 		$prelim = ( time() < get_signup_limit_timestamp() ) ? "voorlopig " : "";
 		if ( participants() > 0 and $pts === 0 ) $str = "Er zijn ".$prelim."nog geen sterktepunten aanwezig. ";
@@ -1407,7 +1460,7 @@
 			}
 			$str .= ( time() < get_cancel_limit_timestamp() ) ? '<br/><br/>Wenst u in een vlaag van zinsverbijstering toch weer uit te schrijven? Gebruik in dat geval de speciale link die u terugvindt in uw bevestigingsmail. Bent u die mail, als onverbeterlijke sloddervos, kwijtgespeeld? Geen probleem, ga naar <a href="'.get_event_url().'ophalen/">de ophaalpagina</a> om de link opnieuw te verzenden. Zeg nu nog dat de KKK niet vergevingsgezind is!' : '';
 		}
-			
+		
 		return $str;
 	}
 	
@@ -1446,47 +1499,5 @@
 		if ( payments_enabled() ) $str .= '<option value="debtors">alle inschrijvers die nog niet betaald hebben</option>';
 		$str .= '</select>';
 		return $str;
-	}
-
-
-
-	################
-	# DEACTIVATION #
-	################
-
-	register_uninstall_hook( __FILE__, 'pdb_uninstall' );	
-	
-	function pdb_uninstall() {
-		delete_option('pdb_cf7_signup_id');
-		delete_option('pdb_cf7_confirm_id');
-		delete_option('pdb_cf7_retrieve_id');
-		delete_option('pdb_cf7_cancel_id');
-		delete_option('pdb_cf7_pay_id');
-		delete_option('pdb_cf7_mail_id');
-		
-		delete_option('pdb_event_title');
-		delete_option('pdb_event_date');
-		delete_option('pdb_event_organizer');
-		delete_option('pdb_event_mail');
-		delete_option('pdb_event_url');
-		delete_option('pdb_event_max_participants');
-		delete_option('pdb_event_max_reserves');
-		delete_option('pdb_event_signup_limit');
-		delete_option('pdb_event_cancel_limit');
-		delete_option('pdb_event_region');
-		delete_option('pdb_event_fixed_category');
-		delete_option('pdb_event_price');
-		delete_option('pdb_event_iban');
-		
-		delete_option('pdb_enable_location');
-		delete_option('pdb_enable_telephone');
-		delete_option('pdb_enable_drinks');
-		delete_option('pdb_enable_reasons');
-		delete_option('pdb_enable_remarks');
-		delete_option('pdb_enable_payments');
-		
-		delete_option('pdb_locations');
-		delete_option('pdb_drinks');
-		delete_option('pdb_reasons');	
 	}
 ?>
