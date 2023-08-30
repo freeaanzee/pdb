@@ -3,7 +3,7 @@
 	 * Plugin Name:				Participants Database
 	 * Plugin URI:				https://github.com/freeaanzee/pdb
 	 * Description:				Register, verify and contact participants for your WordPress hosted event.
-	 * Version:					2.0.5
+	 * Version:					2.0.6
 	 * Author:					Full Stack Ahead
 	 * Author URI:				https://wwww.fullstackahead.be
 	 * License:					GNU General Public License v2
