@@ -3,7 +3,7 @@
 	 * Plugin Name:				Participants Database
 	 * Plugin URI:				https://github.com/freeaanzee/pdb
 	 * Description:				Register, verify and contact participants for your WordPress hosted event.
-	 * Version:					2.0.4
+	 * Version:					2.0.5
 	 * Author:					Full Stack Ahead
 	 * Author URI:				https://wwww.fullstackahead.be
 	 * License:					GNU General Public License v2
@@ -84,9 +84,9 @@
 				add_option( 'pdb_event_mail', get_option('admin_email') );
 				add_option( 'pdb_event_url', home_url('/') );
 				add_option( 'pdb_event_max_participants', 30 );
-				add_option( 'pdb_event_max_reserves', 5 );
-				add_option( 'pdb_event_signup_limit', '2023-11-24 12:00' );
-				add_option( 'pdb_event_cancel_limit', '2023-11-24 12:00' );
+				add_option( 'pdb_event_max_reserves', 10 );
+				add_option( 'pdb_event_signup_limit', '2023-11-24 23:59' );
+				add_option( 'pdb_event_cancel_limit', '2023-11-25 12:00' );
 				add_option( 'pdb_event_region', 'WVL' );
 				add_option( 'pdb_event_fixed_category', false );
 				add_option( 'pdb_event_price', 25 );
@@ -97,12 +97,11 @@
 				add_option( 'pdb_enable_drinks', true );
 				add_option( 'pdb_enable_reasons', true );
 				add_option( 'pdb_enable_remarks', true );
-				add_option( 'pdb_enable_payments', false );
+				add_option( 'pdb_enable_payments', true );
 		
 				add_option( 'pdb_locations', array( 'Aalst', 'Aalter', 'Aarschot', 'Aartselaar', 'Affligem', 'Alken', 'Alveringem', 'Anderlecht', 'Antwerpen', 'Anzegem', 'Ardooie', 'Arendonk', 'As', 'Asse', 'Assenede', 'Avelgem', 'Baarle-Hertog', 'Balen', 'Beernem', 'Beerse', 'Beersel', 'Begijnendijk', 'Bekkevoort', 'Beringen', 'Berlaar', 'Berlare', 'Bertem', 'Bever', 'Beveren', 'Bierbeek', 'Bilzen', 'Blankenberge', 'Bocholt', 'Boechout', 'Bonheiden', 'Boom', 'Boortmeerbeek', 'Borgloon', 'Bornem', 'Borsbeek', 'Boutersem', 'Brakel', 'Brasschaat', 'Brecht', 'Bredene', 'Bree', 'Brugge', 'Brussel', 'Buggenhout', 'Damme', 'De Haan', 'De Panne', 'De Pinte', 'Deerlijk', 'Deinze', 'Denderleeuw', 'Dendermonde', 'Dentergem', 'Dessel', 'Destelbergen', 'Diepenbeek', 'Diest', 'Diksmuide', 'Dilbeek', 'Dilsen-Stokkem', 'Drogenbos', 'Duffel', 'Edegem', 'Eeklo', 'Elsene', 'Erpe-Mere', 'Essen', 'Etterbeek', 'Evere', 'Evergem', 'Galmaarden', 'Ganshoren', 'Gavere', 'Geel', 'Geetbets', 'Genk', 'Gent', 'Geraardsbergen', 'Gingelom', 'Gistel', 'Glabbeek', 'Gooik', 'Grimbergen', 'Grobbendonk', 'Haacht', 'Haaltert', 'Halen', 'Halle', 'Ham', 'Hamme', 'Hamont-Achel', 'Harelbeke', 'Hasselt', 'Hechtel-Eksel', 'Heers', 'Heist-op-den-Berg', 'Hemiksem', 'Herent', 'Herentals', 'Herenthout', 'Herk-de-Stad', 'Herne', 'Herselt', 'Herstappe', 'Herzele', 'Heusden-Zolder', 'Heuvelland', 'Hoegaarden', 'Hoeilaart', 'Hoeselt', 'Holsbeek', 'Hooglede', 'Hoogstraten', 'Horebeke', 'Houthalen-Helchteren', 'Houthulst', 'Hove', 'Huldenberg', 'Hulshout', 'Ichtegem', 'Ieper', 'Ingelmunster', 'Izegem', 'Jabbeke', 'Jette', 'Kalmthout', 'Kampenhout', 'Kapellen', 'Kapelle-op-den-Bos', 'Kaprijke', 'Kasterlee', 'Keerbergen', 'Kinrooi', 'Kluisbergen', 'Knesselare', 'Knokke-Heist', 'Koekelare', 'Koekelberg', 'Koksijde', 'Kontich', 'Kortemark', 'Kortenaken', 'Kortenberg', 'Kortessem', 'Kortrijk', 'Kraainem', 'Kruibeke', 'Kruishoutem', 'Kuurne', 'Laakdal', 'Laarne', 'Lanaken', 'Landen', 'Langemark-Poelkapelle', 'Lebbeke', 'Lede', 'Ledegem', 'Lendelede', 'Lennik', 'Leopoldsburg', 'Leuven', 'Lichtervelde', 'Liedekerke', 'Lier', 'Lierde', 'Lille', 'Linkebeek', 'Lint', 'Linter', 'Lochristi', 'Lokeren', 'Lommel', 'Londerzeel', 'Lo-Reninge', 'Lovendegem', 'Lubbeek', 'Lummen', 'Maarkedal', 'Maaseik', 'Maasmechelen', 'Machelen', 'Maldegem', 'Malle', 'Mechelen', 'Meerhout', 'Meeuwen-Gruitrode', 'Meise', 'Melle', 'Menen', 'Merchtem', 'Merelbeke', 'Merksplas', 'Mesen', 'Meulebeke', 'Middelkerke', 'Moerbeke', 'Mol', 'Moorslede', 'Mortsel', 'Nazareth', 'Neerpelt', 'Nevele', 'Niel', 'Nieuwerkerken', 'Nieuwpoort', 'Nijlen', 'Ninove', 'Olen', 'Oostende', 'Oosterzele', 'Oostkamp', 'Oostrozebeke', 'Opglabbeek', 'Opwijk', 'Oudenaarde', 'Oudenburg', 'Oudergem', 'Oud-Heverlee', 'Oud-Turnhout', 'Overijse', 'Overpelt', 'Peer', 'Pepingen', 'Pittem', 'Poperinge', 'Putte', 'Puurs', 'Ranst', 'Ravels', 'Retie', 'Riemst', 'Rijkevorsel', 'Roeselare', 'Ronse', 'Roosdaal', 'Rotselaar', 'Ruiselede', 'Rumst', 'Schaarbeek', 'Schelle', 'Scherpenheuvel-Zichem', 'Schilde', 'Schoten', 'Sint-Agatha-Berchem', 'Sint-Amands', 'Sint-Genesius-Rode', 'Sint-Gillis', 'Sint-Gillis-Waas', 'Sint-Jans-Molenbeek', 'Sint-Joost-ten-Node', 'Sint-Katelijne-Waver', 'Sint-Lambrechts-Woluwe', 'Sint-Laureins', 'Sint-Lievens-Houtem', 'Sint-Martens-Latem', 'Sint-Niklaas', 'Sint-Pieters-Leeuw', 'Sint-Pieters-Woluwe', 'Sint-Truiden', 'Spiere-Helkijn', 'Stabroek', 'Staden', 'Steenokkerzeel', 'Stekene', 'Temse', 'Ternat', 'Tervuren', 'Tessenderlo', 'Tielt', 'Tielt-Winge', 'Tienen', 'Tongeren', 'Torhout', 'Tremelo', 'Turnhout', 'Ukkel', 'Veurne', 'Vilvoorde', 'Vleteren', 'Voeren', 'Vorselaar', 'Vorst', 'Vosselaar', 'Waarschoot', 'Waasmunster', 'Wachtebeke', 'Waregem', 'Watermaal-Bosvoorde', 'Wellen', 'Wemmel', 'Wervik', 'Westerlo', 'Wetteren', 'Wevelgem', 'Wezembeek-Oppem', 'Wichelen', 'Wielsbeke', 'Wijnegem', 'Willebroek', 'Wingene', 'Wommelgem', 'Wortegem-Petegem', 'Wuustwezel', 'Zandhoven', 'Zaventem', 'Zedelgem', 'Zele', 'Zelzate', 'Zemst', 'Zingem', 'Zoersel', 'Zomergem', 'Zonhoven', 'Zonnebeke', 'Zottegem', 'Zoutleeuw', 'Zuienkerke', 'Zulte', 'Zutendaal', 'Zwalm', 'Zwevegem', 'Zwijndrecht' ) );
-				add_option( 'pdb_drinks', array( 'warme dranken', 'zware bieren', 'frisdrank', 'pintjes', 'wijn' ) );
-				add_option( 'pdb_quizmasters', array( 'Herman Van Molle', 'Erik Van Looy', 'Fien Germijns', 'Jeroen Meus', 'Adriaan Clynckemaillie' ) );
-				add_option( 'pdb_reasons', array( 'uit sympathie voor het goede doel', 'om gezellig iets te drinken', 'ter meerdere eer en glorie', 'voor de prijzentafel' ) );
+				add_option( 'pdb_drinks', array( 'Bloody Mary', 'Chimoncello', 'Pornstar Martini' ) );
+				add_option( 'pdb_reasons', array( 'Adriaan Clynckemaillie', 'Bart De Pauw', 'Erik Van Looy', 'Herman Van Molle', 'Johan Verstreken' ) );
 			}
 		}
 		
@@ -1181,11 +1180,11 @@
 		
 		if ( time() < get_signup_limit_timestamp() ) {	
 			if ( participants() == 0 ) {
-				$str .= "Momenteel zijn er nog geen ploegen ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Wordt u de eerste? Vul het formulier in en u hebt een primeur beet! Bovendien mag u quasi op de schoot komen zitten van onze presentator.";
+				$str .= "Momenteel zijn er nog geen ploegen ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Wordt u de eerste? Vul het formulier in en u hebt een primeur beet! Onze <i>row zero</i> staat open voor pluimage van alle aard.";
 			}
 			
 			if ( participants() == 1 ) {
-				$str .= "Momenteel is er nog maar één ploeg ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Wordt u de fan van het tweede uur? Vul het formulier in en geef de rest het nakijken! Bovendien mag u quasi op de schoot komen zitten van onze presentator.";
+				$str .= "Momenteel is er nog maar één ploeg ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Wordt u de fan van het tweede uur? Vul het formulier in en geef de rest het nakijken! Onze <i>row zero</i> staat open voor pluimage van alle aard.";
 			}
 			
 			if ( participants() > 1 and participants() / get_max_participants() < 0.3 ) {
@@ -1205,7 +1204,7 @@
 			}
 			
 			if ( participants() < ( get_max_participants() + get_max_reserves() ) ) {
-				$str .= " In ruil voor onze vragen-en-vertier betaalt u de avond zelf 20 euro inschrijvingsgeld.<br/><br/>".get_signup_form();
+				$str .= " In ruil voor onze vragen-en-vertier betaalt u de avond zelf ".get_price()." euro inschrijvingsgeld.<br/><br/>".get_signup_form();
 			}
 		} else {
 			$str .= "<p>Inschrijven via de site is helaas niet meer mogelijk!</p><p>Contacteer Adriaan (0485 989 256) of Frederik (0472 788 515) persoonlijk.</p><br/>";
