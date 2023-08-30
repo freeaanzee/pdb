@@ -45,6 +45,7 @@
 			add_shortcode( 'get_team_by_token', 'pdb_get_team' );
 			add_shortcode( 'get_responsible_by_token', 'pdb_get_responsible' );
 			add_shortcode( 'get_mail_by_token', 'pdb_get_mail' );
+			add_shortcode( 'get_location_by_token', 'pdb_get_location' );
 			
 			add_shortcode( 'locations', 'pdb_select_locations' );
 			add_shortcode( 'telephone', 'pdb_text_telephone' );
@@ -575,6 +576,10 @@
 	
 	function pdb_get_mail() {
 		return get_form_row_data('Mail');
+	}
+	
+	function pdb_get_location() {
+		return get_form_row_data('Location');
 	}
 
 	function trim_and_ucwords( $value ) {
