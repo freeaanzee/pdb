@@ -64,7 +64,7 @@
 			}
 		}
 		
-		public function activate_plugin() {
+		public static function activate_plugin() {
 			if ( ! is_plugin_active('contact-form-7/wp-contact-form-7.php') or ! is_plugin_active('contact-form-7-to-database-extension/contact-form-7-db.php') ) {
 				
 				// Annuleer activatie indien CF7 of CFDB niet actief is
@@ -106,7 +106,7 @@
 			}
 		}
 		
-		public function uninstall_plugin() {
+		public static function uninstall_plugin() {
 			delete_option('pdb_cf7_signup_id');
 			delete_option('pdb_cf7_confirm_id');
 			delete_option('pdb_cf7_retrieve_id');
@@ -182,8 +182,8 @@
 		<script>
 			/* Andere events: wpcf7submit, wpcf7invalid, wpcf7mailfailed */
 			document.addEventListener( 'wpcf7mailsent', function(event) {
-				if ( event.detail.contactFormId == get_option('pdb_cf7_pay_id') ) {
-					setTimeout( function() { window.location = '<?php echo get_event_url(); ?>betalen/'; }, 5000 );
+				if ( event.detail.contactFormId == '<?= get_option('pdb_cf7_pay_id'); ?>' ) {
+					setTimeout( function() { window.location = '<?= get_event_url('betalen'); ?>'; }, 5000 );
 				}
 			}, false );
 		</script>
@@ -202,8 +202,6 @@
 	}
 
 	function pdb_dynamicselect_tag_handler( $tag ) {
-		error_log("HALLO");
-		
 		$tag = new WPCF7_FormTag( $tag );
 		
 		if ( empty( $tag->name ) ) {
@@ -351,7 +349,7 @@
 	function pdb_format_cf7_fields( $posted_data ) {
 		error_log( print_r( $posted_data, true ) );
 		// Zie https://wordpress.org/support/topic/why-_wpcf7_container_post-is-empty-in-wpcf7_posted_data/
-		error_log( print_r( _POST, true ) );
+		error_log( print_r( $_POST, true ) );
 		
 		switch ( $_POST['_wpcf7'] ) {
 			case get_option('pdb_cf7_signup_id'):
@@ -431,8 +429,18 @@
 		return $parts[0];
 	}
 	
-	function get_event_url() {
-		return get_option('pdb_event_url');
+	function get_event_url( $path = false, $params = array() ) {
+		$url = get_option('pdb_event_url');
+		
+		if ( $path ) {
+			$url .= $path;
+			
+			if ( substr( $url, -1 ) !== '/' ) {
+				$url .= '/';
+			}
+		}
+		
+		return $url;
 	}
 	
 	function get_max_participants() {
@@ -583,21 +591,21 @@
 	}
 
 	function trim_and_ucwords( $value ) {
-		return ucwords( strtolower( trim($value) ) );
+		return ucwords( strtolower( trim( $value ) ) );
 	}
 
 	function format_team( $value ) {
 		// Ook hoofdletters zetten na punten, trema's en slashes
-		return preg_replace_callback( '|[./-].*?\w|', create_function( '$atts', 'return strtoupper($atts[0]);' ), trim_and_ucwords($value) );
+		return preg_replace_callback( '|[./-].*?\w|', function( $atts ) { return strtoupper( $atts[0] ); }, trim_and_ucwords( $value ) );
 	}
 
 	function format_responsible( $value ) {
 		// Ook hoofdletters zetten na punten, trema's en slashes
-		return preg_replace_callback( '|[./-].*?\w|', create_function( '$atts', 'return strtoupper($atts[0]);' ), trim_and_ucwords($value) );
+		return preg_replace_callback( '|[./-].*?\w|', function( $atts ) { return strtoupper( $atts[0] ); }, trim_and_ucwords( $value ) );
 	}
 
 	function format_mail( $value ) {
-		return strtolower( trim($value) );
+		return strtolower( trim( $value ) );
 	}
 
 	function format_phone( $orig_value, $slash = ' ', $delim = ' ' ) {
