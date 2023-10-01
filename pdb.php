@@ -1201,7 +1201,7 @@
 			}
 			
 			if ( participants() > 1 and participants() / get_max_participants() < 0.3 ) {
-				$str .= "Momenteel zijn er nog maar ".participants()." ploegen ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Wilt u ook toetreden tot dit selecte kransje trendsetters? Vul onderstaand formulier in en uw droom wordt werkelijkheid!";
+				$str .= "Momenteel zijn er nog maar ".participants()." ploegen ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Wilt u ook toetreden tot dit selecte kransje trendsetters? Onze <i>row zero</i> staat open voor pluimage van alle aard. Vul onderstaand formulier in en uw droom wordt werkelijkheid!";
 			}
 			
 			if ( participants() > 1 and participants() / get_max_participants() >= 0.3 and participants() < get_max_participants() ) { 
