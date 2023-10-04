@@ -241,7 +241,7 @@
 			}
 
 			if ( ! $tag->is_required() ) {
-				$value = 'niets doen';
+				$value = 'glaasje water';
 			}
 
 			$options = pdb_get_drinks();
@@ -251,7 +251,7 @@
 			}
 
 			if ( ! $tag->is_required() ) {
-				$value = 'trekken we eens aan onze aap';
+				$value = 'niemand';
 			}
 
 			$options = pdb_get_reasons();
@@ -920,7 +920,7 @@
 		
 		// Bevolk de velden voor de mail
 		$posted_data['Organizer'] = get_event_organizer();
-		$posted_data['URL'] = get_event_url().'resultaten/';
+		$posted_data['URL'] = get_event_url('resultaten');
 		$posted_data['Title'] = get_event_title();
 		$posted_data['Date'] = get_event_date('d/m/Y');
 		
@@ -1157,15 +1157,15 @@
 	// Pas de tekst boven de deelnemerslijst aan naar gelang het aantal ingeschreven deelnemers
 	function print_participants_info() {
 		if ( participants() === 0 ) {
-			$str = "Tot nu toe zijn er nog geen ploegen ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Dat kan beter, jongens: ga naar <a href='".get_event_url()."inschrijven/'>het inschrijvingsformulier</a> en breng hier verandering in!";
+			$str = "Tot nu toe zijn er nog geen ploegen ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Dat kan beter, jongens: ga naar <a href='".get_event_url('inschrijven')."'>het inschrijvingsformulier</a> en breng hier verandering in!";
 		}
 		
 		if ( participants() === 1 ) {
-			$str = "Tot nu toe is er nog maar één ploeg ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Dat kan beter, jongens: ga naar <a href='".get_event_url()."inschrijven/'>het inschrijvingsformulier</a> en breng hier verandering in!";
+			$str = "Tot nu toe is er nog maar één ploeg ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Dat kan beter, jongens: ga naar <a href='".get_event_url('inschrijven')."'>het inschrijvingsformulier</a> en breng hier verandering in!";
 		}
 		
 		if ( participants() > 1 and participants()/get_max_participants() < 0.4 ) {
-			$str = "Tot nu toe zijn er nog maar ".participants()." ploegen ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Haast u naar <a href='".get_event_url()."inschrijven/'>het inschrijvingsformulier</a> om daar verandering in te brengen! Quizzen staan erom bekend statistisch gezien erg weinig terroristen (en vrouwen) aan te trekken.";
+			$str = "Tot nu toe zijn er nog maar ".participants()." ploegen ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Haast u naar <a href='".get_event_url('inschrijven')."'>het inschrijvingsformulier</a> om daar verandering in te brengen!";
 		}
 		
 		if ( participants() > 1 and participants()/get_max_participants() >= 0.4 and participants() < get_max_participants() ) {
@@ -1201,11 +1201,11 @@
 			}
 			
 			if ( participants() > 1 and participants() / get_max_participants() < 0.3 ) {
-				$str .= "Momenteel zijn er nog maar ".participants()." ploegen ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Wilt u ook toetreden tot dit selecte kransje trendsetters? Onze <i>row zero</i> staat open voor pluimage van alle aard. Vul onderstaand formulier in en uw droom wordt werkelijkheid!";
+				$str .= "Momenteel zijn er nog maar ".participants()." ploegen ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Wilt u ook toetreden tot dit selecte kransje trendsetters? Onze <i>row zero</i> staat open voor pluimage van alle aard.";
 			}
 			
 			if ( participants() > 1 and participants() / get_max_participants() >= 0.3 and participants() < get_max_participants() ) { 
-				$str .= "Momenteel zijn er al ".participants()." ploegen ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Wordt u de volgende? Vul het formulier in en u bent erbij! Opgelet: we laten maximum ".get_max_participants()." tafels toe (en een reservelijst van ".get_max_reserves()." ploegen).";
+				$str .= "Momenteel zijn er al ".participants()." ploegen ingeschreven voor de ".get_event_title()." van ".get_event_date('l j F Y').". Wordt u de volgende? Vul het formulier in en uw droom wordt werkelijkheid! Opgelet: we laten maximum ".get_max_participants()." tafels toe (en een reservelijst van ".get_max_reserves()." ploegen).";
 			}
 			
 			if ( participants() >= get_max_participants() ) {
@@ -1247,7 +1247,7 @@
 			if ( strlen( get_query_var('Token') ) === 32 ) {
 				$output = sprintf( 'Hieronder vindt u een overzicht van uw inschrijvingsgegevens. Klik op de knop om uw knusse zitje op de %s te annuleren. Opgepast: u zal onmiddellijk van de deelnemerslijst geschrapt worden! Opnieuw inschrijven met deze ploegnaam wordt onmogelijk.', get_event_title() );
 			} else {
-				$output = sprintf( 'Omdat u op onrechtmatige wijze op deze pagina belandde, krijgt u hieronder een foutmelding te zien. Snor de annulatielink in uw bevestigingsmail op, of ga naar <a href="%s">de ophaalpagina</a> om een nieuwe link aan te vragen. U hoort het: de KoeKedozeKlan doet er alles aan om de diefstal van uw begeerde identiteit te voorkomen!', get_event_url().'ophalen/' );
+				$output = sprintf( 'Omdat u op onrechtmatige wijze op deze pagina belandde, krijgt u hieronder een foutmelding te zien. Snor de annulatielink in uw bevestigingsmail op, of ga naar <a href="%s">de ophaalpagina</a> om een nieuwe link aan te vragen. U hoort het: de KoeKedozeKlan doet er alles aan om de diefstal van uw begeerde identiteit te voorkomen!', get_event_url('ophalen') );
 			}
 			
 			return '<p>' . $output . '</p>' . get_cancel_form();
@@ -1470,7 +1470,7 @@
 				if ( $cnt !== 1 ) $str .= "en allemaal";
 				$str .= " achter u laat.";
 			}
-			$str .= ( time() < get_cancel_limit_timestamp() ) ? '<br/><br/>Wenst u in een vlaag van zinsverbijstering toch weer uit te schrijven? Gebruik in dat geval de speciale link die u terugvindt in uw bevestigingsmail. Bent u die mail, als onverbeterlijke sloddervos, kwijtgespeeld? Geen probleem, ga naar <a href="'.get_event_url().'ophalen/">de ophaalpagina</a> om de link opnieuw te verzenden. Zeg nu nog dat de KKK niet vergevingsgezind is!' : '';
+			$str .= ( time() < get_cancel_limit_timestamp() ) ? '<br/><br/>Wenst u in een vlaag van zinsverbijstering toch weer uit te schrijven? Gebruik in dat geval de speciale link die u terugvindt in uw bevestigingsmail. Bent u die mail, als onverbeterlijke sloddervos, kwijtgespeeld? Geen probleem, ga naar <a href="'.get_event_url('ophalen').'">de ophaalpagina</a> om de link opnieuw te verzenden. Zeg nu nog dat de KKK niet vergevingsgezind is!' : '';
 		}
 		
 		return $str;
